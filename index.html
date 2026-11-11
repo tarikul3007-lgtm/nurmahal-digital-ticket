@@ -1,14 +1,177 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>নূরমহল সুরেশ্বর বাস কাফেলা</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*{box-sizing:border-box} body{font-family:sans-serif;background:#fff8d6;margin:0}
+.top{background:#0d5c3f;color:#fff;text-align:center;padding:18px 10px;border-radius:0 0 18px 18px}
+.top h1{margin:0;font-size:21px} .top p{margin:6px 0 0;color:#c8f0d8;font-size:13px}
+.card{background:#fff;margin:12px;padding:14px;border-radius:14px;box-shadow:0 2px 10px #0002}
+label{font-size:13px;font-weight:bold;display:block;margin-top:4px} input,select{width:100%;padding:12px;margin:6px 0 10px;border:1px solid #ddd;border-radius:10px;font-size:15px}
+h3{text-align:center;margin:16px 0 6px;font-size:14px}
+.front{display:flex;gap:8px}
+.fbox{flex:1;background:#8ecff0;padding:10px;border-radius:10px;text-align:center;font-weight:bold;font-size:12px}
+.fbox.black{background:#000;color:#fff}
+.sub{display:flex;gap:8px;margin-top:10px} .subbox{flex:1}
+.seat{padding:10px 0;text-align:center;border:1.5px solid #333;border-radius:8px;background:#fff;cursor:pointer;font-weight:bold;font-size:13px;margin-bottom:6px}
+.seat.sel{background:#0d5c3f;color:#fff;border-color:#0d5c3f}
+.seat.booked{background:#d32f2f!important;color:#fff!important;border-color:#d32f2f;cursor:not-allowed}
+.seat.orange{background:#f9a94e} .seat.light{background:#ffe6bf} .seat.last{background:#fff2a8}
+.row{display:grid;grid-template-columns:1fr 1fr 28px 1fr 1fr;gap:6px}
+.goli{text-align:center;color:#999;font-size:11px;font-weight:bold}
+.lastrow{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.totalbox{background:#e8f5e9;border:2px solid #0d5c3f;padding:12px;border-radius:12px;text-align:center;font-size:17px;font-weight:bold;margin:10px 0}
+.btn{width:100%;padding:15px;background:#25D366;color:#fff;border:0;border-radius:12px;font-size:17px;font-weight:bold;margin-top:8px}
+.btn2{width:100%;padding:13px;background:#0d5c3f;color:#fff;border:0;border-radius:12px;font-size:15px;font-weight:bold;margin-top:8px}
+.btn3{width:100%;padding:12px;background:#fff;color:#d32f2f;border:1.5px solid #d32f2f;border-radius:12px;font-size:14px;font-weight:bold;margin-top:8px}
+.foot{text-align:center;font-size:12px;color:#666;margin-top:10px;line-height:1.7}
+.foot b{color:#0d5c3f;font-size:13px}
+.legend{display:flex;gap:8px;justify-content:center;font-size:12px;font-weight:bold;margin:8px 0}
+.legend span{padding:5px 10px;border-radius:20px;border:1px solid #ccc}
+.ticket{display:none;background:#fff;border:2px dashed #0d5c3f;border-radius:16px;padding:16px;margin:12px}
+.ticket h2{text-align:center;color:#0d5c3f;margin:0 0 8px;font-size:19px}
+.ticket p{margin:6px 0;font-size:14px;border-bottom:1px dashed #eee;padding-bottom:5px}
+.ticket .big{text-align:center;font-size:20px;font-weight:bold;color:#d32f2f;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="top"><h1>🚌 নূরমহল সুরেশ্বর বাস কাফেলা</h1><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ | মোট ৫১ সিট</p></div>
+<div class="card" id="formCard">
+<label>🚌 গাড়ী নং</label>
+<select id="busno" onchange="loadBooked()"><option>গাড়ী নংঃ ১</option><option>গাড়ী নংঃ ২</option><option>গাড়ী নংঃ ৩</option><option>গাড়ী নংঃ ৪</option><option>গাড়ী নংঃ ৫</option><option>গাড়ী নংঃ ৬</option><option>গাড়ী নংঃ ৭</option><option>গাড়ী নংঃ ৮</option><option>গাড়ী নংঃ ৯</option><option>গাড়ী নংঃ ১০</option><option>গাড়ী নংঃ ১১</option><option>গাড়ী নংঃ ১২</option><option>গাড়ী নংঃ ১৩</option><option>গাড়ী নংঃ ১৪</option><option>গাড়ী নংঃ ১৫</option><option>গাড়ী নংঃ ১৬</option><option>গাড়ী নংঃ ১৭</option><option>গাড়ী নংঃ ১৮</option><option>গাড়ী নংঃ ১৯</option><option>গাড়ী নংঃ ২০</option></select>
+<label>নাম</label><input id="name" placeholder="যাত্রীর নাম লিখুন">
+<label>ঠিকানা</label>
+<select id="thikana"><option>গৌরীপুর</option><option>ভাংনামারী</option><option>ঈশ্বরগঞ্জ</option><option>কুমরীকান্দা</option><option>মাঝিপাড়া</option><option>আললপুর</option><option>চায়নামোড়</option><option>তারাকান্দা</option><option>হালুয়াঘাট</option><option>হোসেনপুর</option><option>গাজীপুর</option></select>
+<label>মোবাইল</label><input id="phone" type="tel" placeholder="01XXXXXXXXX">
+<label>যাত্রা তারিখ</label><input id="date" type="date" onchange="loadBooked()">
+<label>📍 উঠার স্থান</label>
+<select id="boarding"><option>গৌরীপুর</option><option>শম্ভুগঞ্জ</option><option>ময়মনসিংহ</option><option>উত্তরা</option><option>গাজীপুর</option><option>ঢাকা</option><option>সুরেশ্বর</option></select>
+<label>ভাড়া (জন প্রতি)</label>
+<select id="vara" onchange="calc()"><option value="1020">১০২০ টাকা</option><option value="800">৮০০ টাকা</option><option value="600">৬০০ টাকা</option></select>
+<div class="legend"><span style="background:#fff">⬜ খালি</span><span style="background:#0d5c3f;color:#fff">🟩 সিলেক্ট</span><span style="background:#d32f2f;color:#fff">🟥 বুকড</span></div>
+<h3>সামনে - চালক / বনেট</h3>
+<div class="front"><div class="fbox">PROBESH (Bame)</div><div class="fbox">BONNET (Majhe)</div><div class="fbox black">CHALOK (Dane)</div></div>
+<h3>BONNET ER NICHE</h3>
+<div class="sub"><div class="subbox"><div class="seat orange" data-seat="M-1">M-1</div><div class="seat orange" data-seat="M-3">M-3</div></div><div class="subbox"><div class="seat orange" data-seat="M-2">M-2</div><div class="seat orange" data-seat="M-4">M-4</div></div><div class="subbox"></div><div class="subbox"><div class="seat light" data-seat="N-1">N-1</div><div class="seat light" data-seat="N-2">N-2</div></div></div>
+<h3>A1 A2 | GOLI | A3 A4 -- J porjonto</h3>
+<div id="middle"></div>
+<h3 style="color:#d00">LAST ROW - SHESH SHARI</h3>
+<div class="lastrow" id="lastrow"></div>
+<div class="totalbox" id="summary">সিট সিলেক্ট করো<br>সিট নং: - | মোট সিট: 0 | মোট ভাড়া: 0 টাকা</div>
+<button class="btn" onclick="book()">✅ বুক করো + টিকেট বানাও</button>
+<button class="btn3" onclick="adminClear()">🔓 এডমিন: বুকিং খালি করো (ভুল হলে)</button>
+<div class="foot">রুটঃ গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ<br><b>প্রয়োজনেঃ মোঃ তরিকুল ইসলাম সুরেশ্বরী ০১৯২৩-৫৩১৫১০</b><br>Total 51 Seats | K6 Removed</div>
+</div>
+
+<div class="ticket" id="ticket">
+<h2>🚌 নূরমহল সুরেশ্বর বাস কাফেলা</h2>
+<p style="text-align:center;font-size:12px">গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ</p>
+<p>🚌 গাড়ী নং: <b id="tBus"></b></p>
+<p>👤 নাম: <b id="tName"></b></p>
+<p>🏠 ঠিকানা: <b id="tThikana"></b></p>
+<p>📞 মোবাইল: <b id="tPhone"></b></p>
+<p>📅 যাত্রা তারিখ: <b id="tDate"></b></p>
+<p>📍 উঠার স্থান: <b id="tBoard"></b></p>
+<p>💺 সিট নং: <b id="tSeats" style="color:#d32f2f"></b></p>
+<p>💺 মোট সিট: <b id="tCount"></b></p>
+<p>💰 ভাড়া: <b id="tVara"></b> | মোট: <b id="tTotal"></b></p>
+<div class="big">🎫 টিকেট কনফার্ম ✅</div>
+<p style="text-align:center">প্রয়োজনেঃ মোঃ তরিকুল ইসলাম সুরেশ্বরী 01923-531510</p>
+</div>
+<div id="ticketBtns" style="display:none;margin:0 12px 12px">
+<button class="btn2" onclick="downloadTicket()">📸 টিকেট ছবি ডাউনলোড করো</button>
+<button class="btn" onclick="sendWhatsApp()">✅ WhatsApp এ বুকিং পাঠাও</button>
+<button class="btn3" onclick="newBooking()">➕ নতুন বুকিং করো</button>
+</div>
+
 <script>
-// বুক করা সিটে চাপ দিলে বাতিল হবে
-document.addEventListener('click', function(e){
-  let seat = e.target.closest('button, .seat');
-  if(!seat) return;
-  if(seat.classList.contains('booked') || seat.classList.contains('selected')){
-    if(confirm('এই সিটটা বাতিল করবা?')){
-      seat.classList.remove('booked','selected');
-      alert('সিট বাতিল হয়ে গেছে। এখন আবার খালি।');
-      location.reload();
-    }
-  }
+let sel=[]; let mid=document.getElementById('middle');
+let lastData={};
+function getKey(){ return document.getElementById('busno').value + '|' + document.getElementById('date').value; }
+function getBooked(){ try{return JSON.parse(localStorage.getItem('nurmahal_booked')||'{}')}catch(e){return {}} }
+function saveBooked(d){ localStorage.setItem('nurmahal_booked', JSON.stringify(d)); }
+function loadBooked(){
+  let key=getKey(); let booked=getBooked()[key]||[];
+  sel=[]; calc();
+  document.querySelectorAll('.seat').forEach(el=>{
+    el.classList.remove('sel','booked');
+    if(booked.includes(el.dataset.seat)){ el.classList.add('booked'); el.innerText=el.dataset.seat+' • BOOKED'; }
+    else { el.innerText=el.dataset.seat; }
+  });
+}
+['A','B','C','D','E','F','G','H','I','J'].forEach(r=>{
+ let div=document.createElement('div'); div.className='row';
+ ['1','2'].forEach(n=>{let s=document.createElement('div'); s.className='seat'; s.innerText=r+'-'+n; s.dataset.seat=r+'-'+n; div.appendChild(s);});
+ let g=document.createElement('div'); g.className='goli'; g.innerText='GOLI'; div.appendChild(g);
+ ['3','4'].forEach(n=>{let s=document.createElement('div'); s.className='seat'; s.innerText=r+'-'+n; s.dataset.seat=r+'-'+n; div.appendChild(s);});
+ mid.appendChild(div);
 });
+['K1','K2','K3','K4','K5'].forEach(k=>{let s=document.createElement('div'); s.className='seat last'; s.innerText=k; s.dataset.seat=k; document.getElementById('lastrow').appendChild(s);});
+function calc(){
+ let v=parseInt(document.getElementById('vara').value);
+ let tot=v*sel.length;
+ document.getElementById('summary').innerHTML=`সিট নং: ${sel.length?sel.join(', '):'-'}<br>মোট সিট: ${sel.length} টি | ভাড়া: ${v} টাকা | মোট ভাড়া: ${tot} টাকা`;
+ return tot;
+}
+document.querySelectorAll('.seat').forEach(el=>{el.onclick=()=>{
+ let s=el.dataset.seat;
+ if(el.classList.contains('booked')){ alert(s+' - এই সিটটা আগেই বুক হয়ে গেছে ভাই! লাল সিট নেওয়া যাবে না।'); return; }
+ if(sel.includes(s)){
+   if(confirm(s+' - এই সিটটা বাতিল করবা?')){ sel=sel.filter(x=>x!=s); el.classList.remove('sel'); calc(); }
+ }else{ sel.push(s); el.classList.add('sel'); calc(); }
+}});
+function book(){
+ let bus=document.getElementById('busno').value;
+ let n=document.getElementById('name').value.trim();
+ let th=document.getElementById('thikana').value;
+ let p=document.getElementById('phone').value.trim();
+ let dt=document.getElementById('date').value;
+ let b=document.getElementById('boarding').value;
+ let v=document.getElementById('vara').value;
+ let tot=v*sel.length;
+ if(!n||!p||!dt||sel.length==0){alert('নাম, মোবাইল, তারিখ আর সিট দাও ভাই');return;}
+ let key=getKey(); let all=getBooked(); let already=all[key]||[];
+ let clash=sel.filter(s=>already.includes(s));
+ if(clash.length){ alert(clash.join(', ')+' আগেই বুক হয়ে গেছে! অন্য সিট নাও'); loadBooked(); return; }
+ all[key]=[...already, ...sel]; saveBooked(all);
+ lastData={bus,n,th,p,dt,b,v,tot,seats:[...sel]};
+ document.getElementById('tBus').innerText=bus;
+ document.getElementById('tName').innerText=n;
+ document.getElementById('tThikana').innerText=th;
+ document.getElementById('tPhone').innerText=p;
+ document.getElementById('tDate').innerText=dt;
+ document.getElementById('tBoard').innerText=b;
+ document.getElementById('tSeats').innerText=sel.join(', ');
+ document.getElementById('tCount').innerText=sel.length+' টি';
+ document.getElementById('tVara').innerText=v+' টাকা';
+ document.getElementById('tTotal').innerText=tot+' টাকা';
+ document.getElementById('ticket').style.display='block';
+ document.getElementById('ticketBtns').style.display='block';
+ document.getElementById('ticket').scrollIntoView({behavior:'smooth'});
+ loadBooked();
+}
+function downloadTicket(){
+  let el=document.getElementById('ticket');
+  html2canvas(el,{scale:2}).then(canvas=>{
+    let a=document.createElement('a'); a.download='Nurmahal-Ticket-'+lastData.n+'.png'; a.href=canvas.toDataURL(); a.click();
+    alert('টিকেট ছবি ডাউনলোড হয়ে গেছে!');
+  });
+}
+function sendWhatsApp(){
+  let d=lastData; if(!d.seats){alert('আগে বুক করো');return;}
+  let text=`🚌 *নূরমহল সুরেশ্বর বাস কাফেলা*%0A%0A🚌 গাড়ী নংঃ ${d.bus}%0A👤 নামঃ ${d.n}%0A🏠 ঠিকানাঃ ${d.th}%0A📞 মোবাইলঃ ${d.p}%0A📅 যাত্রা তারিখঃ ${d.dt}%0A💺 সিট নংঃ ${d.seats.join(', ')}%0A💺 মোট সিটঃ ${d.seats.length} টি%0A💰 ভাড়াঃ ${d.v} টাকা%0A💰 মোট ভাড়াঃ ${d.tot} টাকা%0A📍 উঠার স্থানঃ ${d.b}%0A🛣️ রুটঃ গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ%0A%0Aপ্রয়োজনেঃ মোঃ তরিকুল ইসলাম সুরেশ্বরী 01923-531510`;
+  window.open('https://wa.me/8801923531510?text='+text,'_blank');
+}
+function newBooking(){ document.getElementById('ticket').style.display='none'; document.getElementById('ticketBtns').style.display='none'; sel=[]; calc(); window.scrollTo(0,0); }
+function adminClear(){
+  let pass=prompt('এডমিন পাসওয়ার্ড দাও (তোমার মোবাইলের শেষ ৬ ডিজিট: 531510)');
+  if(pass!=='531510'){ alert('ভুল পাসওয়ার্ড!'); return; }
+  let key=getKey(); let all=getBooked(); delete all[key]; saveBooked(all); loadBooked(); alert('এই গাড়ী + তারিখের সব বুকিং খালি হয়ে গেছে। এখন আবার বুক করা যাবে।');
+}
+loadBooked();
 </script>
+</body>
+                                                                                                                                                                                                                                                            </html>
