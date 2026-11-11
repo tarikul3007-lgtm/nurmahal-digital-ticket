@@ -57,7 +57,6 @@ video{width:100%;border-radius:10px;background:#000}
 <div id="scanResult" style="margin-top:12px;text-align:center"></div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
 let lastText="";
@@ -73,8 +72,7 @@ if(!n||!s){alert('নাম আর সিট দিন');return;}
 lastText="নূরমহল টিকিট | নাম:"+n+" | মোবাইল:"+p+" | সিট:"+s+" | ভাড়া:"+f+" টাকা | তারিখ:"+d;
 document.getElementById('tInfo').innerHTML="<b>"+n+"</b><br>মোবাইল: "+p+"<br>সিট: "+s+" | ভাড়া: "+f+" টাকা<br>তারিখ: "+d;
 document.getElementById('result').style.display='block';
-document.getElementById('qrcode').innerHTML="";
-new QRCode(document.getElementById('qrcode'),{text:lastText,width:160,height:160});
+document.getElementById('qrcode').innerHTML="<img src='https://api.qrserver.com/v1/create-qr-code/?size=180x180&data="+encodeURIComponent(lastText)+"'>";
 }
 function sendWhats(){
 let p=document.getElementById('phone').value;
