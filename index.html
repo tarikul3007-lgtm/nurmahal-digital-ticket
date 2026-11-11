@@ -23,7 +23,7 @@ input,select{width:100%;padding:11px;margin:6px 0 12px;border:1px solid #ddd;bor
 .ticket h3{margin:0;color:#8b1e1e}
 #qrcode{display:flex;justify-content:center;margin:10px 0}
 #qrcode img{width:180px;height:180px}
-video{width:100%;border-radius:10px;background:#000}
+#reader{width:100%;margin-top:10px}
 .ok{color:green;font-weight:bold;font-size:20px}
 </style>
 </head>
@@ -53,14 +53,16 @@ video{width:100%;border-radius:10px;background:#000}
 </div>
 
 <div id="tab2" class="card" style="display:none">
+<p style="text-align:center;color:#555">নিচের বাটনে চাপ দিয়ে ক্যামেরা চালু করুন, অথবা মোবাইলের নরমাল ক্যামেরা দিয়েও স্ক্যান করতে পারবেন</p>
 <button class="btn btn-red" onclick="startScan()">📷 ক্যামেরা চালু করুন</button>
-<video id="video" playsinline style="display:none;margin-top:10px"></video>
+<div id="reader"></div>
 <div id="scanResult" style="margin-top:12px;text-align:center"></div>
 </div>
 
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
 let lastText="";
+let scanner=null;
 function showTab(n){
 document.getElementById('tab1').style.display=n==1?'block':'none';
 document.getElementById('tab2').style.display=n==2?'block':'none';
@@ -83,12 +85,13 @@ let msg=encodeURIComponent("NURMAHAL TICKET\n"+lastText);
 window.open("https://wa.me/88"+p+"?text="+msg,"_blank");
 }
 function startScan(){
-document.getElementById('video').style.display='block';
-let qr=new Html5Qrcode("video");
-qr.start({facingMode:"environment"},{fps:10,qrbox:250},(txt)=>{
-qr.stop();
+document.getElementById('scanResult').innerHTML="ক্যামেরা চালু হচ্ছে... অনুমতি দিন";
+if(scanner){scanner.clear();}
+scanner=new Html5QrcodeScanner("reader",{fps:10,qrbox:250},false);
+scanner.render((txt)=>{
+scanner.clear();
 document.getElementById('scanResult').innerHTML="<div class='ok'>✅ টিকিট সঠিক!</div><p>"+txt+"</p>";
-}).catch(e=>{alert('ক্যামেরা চালু হয় নাই, অনুমতি দিন')});
+},(err)=>{});
 }
 document.getElementById('date').valueAsDate=new Date();
 </script>
