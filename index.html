@@ -26,6 +26,7 @@ h3{text-align:center;margin:16px 0 6px;font-size:14px}
 .totalbox{background:#e8f5e9;border:2px solid #0d5c3f;padding:12px;border-radius:12px;text-align:center;font-size:17px;font-weight:bold;margin:10px 0}
 .btn{width:100%;padding:15px;background:#25D366;color:#fff;border:0;border-radius:12px;font-size:17px;font-weight:bold;margin-top:8px}
 .btn2{width:100%;padding:13px;background:#0d5c3f;color:#fff;border:0;border-radius:12px;font-size:15px;font-weight:bold;margin-top:8px}
+.btnBlue{width:100%;padding:13px;background:#1976d2;color:#fff;border:0;border-radius:12px;font-size:15px;font-weight:bold;margin-top:8px}
 .btn3{width:100%;padding:12px;background:#fff;color:#d32f2f;border:1.5px solid #d32f2f;border-radius:12px;font-size:14px;font-weight:bold;margin-top:8px}
 .foot{text-align:center;font-size:12px;color:#666;margin-top:10px;line-height:1.7}
 .foot b{color:#0d5c3f;font-size:13px}
@@ -35,10 +36,20 @@ h3{text-align:center;margin:16px 0 6px;font-size:14px}
 .ticket h2{text-align:center;color:#0d5c3f;margin:0 0 8px;font-size:19px}
 .ticket p{margin:6px 0;font-size:14px;border-bottom:1px dashed #eee;padding-bottom:5px}
 .ticket .big{text-align:center;font-size:20px;font-weight:bold;color:#d32f2f;margin-top:10px}
+.qrbox{text-align:center;margin:12px 0;background:#f9f9f9;padding:12px;border-radius:12px}
+.qrbox img{width:150px;height:150px;border:4px solid #fff;box-shadow:0 2px 8px #0002}
+.bookItem{background:#f9f9f9;border:1px solid #eee;border-radius:12px;padding:12px;margin-bottom:8px}
+.bookItem b{color:#0d5c3f}
+.smallBtn{padding:7px 12px;border-radius:8px;border:0;font-weight:bold;margin-right:6px;margin-top:6px}
 </style>
 </head>
 <body>
 <div class="top"><h1>🚌 নূরমহল সুরেশ্বর বাস কাফেলা</h1><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ | মোট ৫১ সিট</p></div>
+<div class="card">
+<button class="btnBlue" onclick="toggleList()">📋 বুকিং টিকেট / লিস্ট দেখো</button>
+<div id="bookingList" style="display:none;margin-top:12px"></div>
+</div>
+
 <div class="card" id="formCard">
 <label>🚌 গাড়ী নং</label>
 <select id="busno" onchange="loadBooked()"><option>গাড়ী নংঃ ১</option><option>গাড়ী নংঃ ২</option><option>গাড়ী নংঃ ৩</option><option>গাড়ী নংঃ ৪</option><option>গাড়ী নংঃ ৫</option><option>গাড়ী নংঃ ৬</option><option>গাড়ী নংঃ ৭</option><option>গাড়ী নংঃ ৮</option><option>গাড়ী নংঃ ৯</option><option>গাড়ী নংঃ ১০</option><option>গাড়ী নংঃ ১১</option><option>গাড়ী নংঃ ১২</option><option>গাড়ী নংঃ ১৩</option><option>গাড়ী নংঃ ১৪</option><option>গাড়ী নংঃ ১৫</option><option>গাড়ী নংঃ ১৬</option><option>গাড়ী নংঃ ১৭</option><option>গাড়ী নংঃ ১৮</option><option>গাড়ী নংঃ ১৯</option><option>গাড়ী নংঃ ২০</option></select>
@@ -78,11 +89,16 @@ h3{text-align:center;margin:16px 0 6px;font-size:14px}
 <p>💺 সিট নং: <b id="tSeats" style="color:#d32f2f"></b></p>
 <p>💺 মোট সিট: <b id="tCount"></b></p>
 <p>💰 ভাড়া: <b id="tVara"></b> | মোট: <b id="tTotal"></b></p>
+<div class="qrbox">
+<img id="qrImg" src="" alt="QR Code">
+<div style="font-size:12px;font-weight:bold;margin-top:6px">📷 এই QR স্ক্যান করলেই টিকেট দেখা যাবে</div>
+<div id="qrText" style="font-size:11px;color:#666;margin-top:4px"></div>
+</div>
 <div class="big">🎫 টিকেট কনফার্ম ✅</div>
 <p style="text-align:center">প্রয়োজনেঃ মোঃ তরিকুল ইসলাম সুরেশ্বরী 01923-531510</p>
 </div>
 <div id="ticketBtns" style="display:none;margin:0 12px 12px">
-<button class="btn2" onclick="downloadTicket()">📸 টিকেট ছবি ডাউনলোড করো</button>
+<button class="btn2" onclick="downloadTicket()">📸 টিকেট ছবি ডাউনলোড করো (QR সহ)</button>
 <button class="btn" onclick="sendWhatsApp()">✅ WhatsApp এ বুকিং পাঠাও</button>
 <button class="btn3" onclick="newBooking()">➕ নতুন বুকিং করো</button>
 </div>
@@ -91,16 +107,21 @@ h3{text-align:center;margin:16px 0 6px;font-size:14px}
 let sel=[]; let mid=document.getElementById('middle');
 let lastData={};
 function getKey(){ return document.getElementById('busno').value + '|' + document.getElementById('date').value; }
-function getBooked(){ try{return JSON.parse(localStorage.getItem('nurmahal_booked')||'{}')}catch(e){return {}} }
-function saveBooked(d){ localStorage.setItem('nurmahal_booked', JSON.stringify(d)); }
+function getBookings(){ try{return JSON.parse(localStorage.getItem('nurmahal_bookings')||'[]')}catch(e){return []} }
+function saveBookings(b){ localStorage.setItem('nurmahal_bookings', JSON.stringify(b)); }
+function getBookedMap(){
+  let map={}; getBookings().forEach(b=>{ let k=b.bus+'|'+b.dt; if(!map[k]) map[k]=[]; map[k]=map[k].concat(b.seats); });
+  return map;
+}
 function loadBooked(){
-  let key=getKey(); let booked=getBooked()[key]||[];
+  let key=getKey(); let booked=getBookedMap()[key]||[];
   sel=[]; calc();
   document.querySelectorAll('.seat').forEach(el=>{
     el.classList.remove('sel','booked');
     if(booked.includes(el.dataset.seat)){ el.classList.add('booked'); el.innerText=el.dataset.seat+' • BOOKED'; }
     else { el.innerText=el.dataset.seat; }
   });
+  renderList();
 }
 ['A','B','C','D','E','F','G','H','I','J'].forEach(r=>{
  let div=document.createElement('div'); div.className='row';
@@ -123,6 +144,25 @@ document.querySelectorAll('.seat').forEach(el=>{el.onclick=()=>{
    if(confirm(s+' - এই সিটটা বাতিল করবা?')){ sel=sel.filter(x=>x!=s); el.classList.remove('sel'); calc(); }
  }else{ sel.push(s); el.classList.add('sel'); calc(); }
 }});
+function showTicket(d){
+  lastData=d;
+  document.getElementById('tBus').innerText=d.bus;
+  document.getElementById('tName').innerText=d.n;
+  document.getElementById('tThikana').innerText=d.th;
+  document.getElementById('tPhone').innerText=d.p;
+  document.getElementById('tDate').innerText=d.dt;
+  document.getElementById('tBoard').innerText=d.b;
+  document.getElementById('tSeats').innerText=d.seats.join(', ');
+  document.getElementById('tCount').innerText=d.seats.length+' টি';
+  document.getElementById('tVara').innerText=d.v+' টাকা';
+  document.getElementById('tTotal').innerText=d.tot+' টাকা';
+  let qrData=`NURMAHAL | ${d.bus} | ${d.n} | ${d.p} | ${d.dt} | Seat: ${d.seats.join(',')} | Total: ${d.tot} Tk | ${d.b}`;
+  document.getElementById('qrText').innerText=qrData;
+  document.getElementById('qrImg').src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent(qrData);
+  document.getElementById('ticket').style.display='block';
+  document.getElementById('ticketBtns').style.display='block';
+  document.getElementById('ticket').scrollIntoView({behavior:'smooth'});
+}
 function book(){
  let bus=document.getElementById('busno').value;
  let n=document.getElementById('name').value.trim();
@@ -133,31 +173,18 @@ function book(){
  let v=document.getElementById('vara').value;
  let tot=v*sel.length;
  if(!n||!p||!dt||sel.length==0){alert('নাম, মোবাইল, তারিখ আর সিট দাও ভাই');return;}
- let key=getKey(); let all=getBooked(); let already=all[key]||[];
+ let key=getKey(); let already=getBookedMap()[key]||[];
  let clash=sel.filter(s=>already.includes(s));
  if(clash.length){ alert(clash.join(', ')+' আগেই বুক হয়ে গেছে! অন্য সিট নাও'); loadBooked(); return; }
- all[key]=[...already, ...sel]; saveBooked(all);
- lastData={bus,n,th,p,dt,b,v,tot,seats:[...sel]};
- document.getElementById('tBus').innerText=bus;
- document.getElementById('tName').innerText=n;
- document.getElementById('tThikana').innerText=th;
- document.getElementById('tPhone').innerText=p;
- document.getElementById('tDate').innerText=dt;
- document.getElementById('tBoard').innerText=b;
- document.getElementById('tSeats').innerText=sel.join(', ');
- document.getElementById('tCount').innerText=sel.length+' টি';
- document.getElementById('tVara').innerText=v+' টাকা';
- document.getElementById('tTotal').innerText=tot+' টাকা';
- document.getElementById('ticket').style.display='block';
- document.getElementById('ticketBtns').style.display='block';
- document.getElementById('ticket').scrollIntoView({behavior:'smooth'});
- loadBooked();
+ let d={bus,n,th,p,dt,b,v,tot,seats:[...sel],time:new Date().toLocaleString('bn-BD')};
+ let all=getBookings(); all.push(d); saveBookings(all);
+ showTicket(d); loadBooked();
 }
 function downloadTicket(){
   let el=document.getElementById('ticket');
-  html2canvas(el,{scale:2}).then(canvas=>{
+  html2canvas(el,{scale:2,useCORS:true}).then(canvas=>{
     let a=document.createElement('a'); a.download='Nurmahal-Ticket-'+lastData.n+'.png'; a.href=canvas.toDataURL(); a.click();
-    alert('টিকেট ছবি ডাউনলোড হয়ে গেছে!');
+    alert('টিকেট ছবি ডাউনলোড হয়ে গেছে! QR সহ');
   });
 }
 function sendWhatsApp(){
@@ -166,12 +193,36 @@ function sendWhatsApp(){
   window.open('https://wa.me/8801923531510?text='+text,'_blank');
 }
 function newBooking(){ document.getElementById('ticket').style.display='none'; document.getElementById('ticketBtns').style.display='none'; sel=[]; calc(); window.scrollTo(0,0); }
+function toggleList(){
+  let el=document.getElementById('bookingList');
+  if(el.style.display==='none'){ el.style.display='block'; renderList(); el.scrollIntoView({behavior:'smooth'}); }
+  else el.style.display='none';
+}
+function renderList(){
+  let el=document.getElementById('bookingList');
+  let all=getBookings();
+  if(!all.length){ el.innerHTML='<p style="text-align:center;color:#666">এখনো কোনো বুকিং নাই ভাই।</p>'; return; }
+  let html=`<h3 style="margin:0 0 10px">📋 মোট বুকিং: ${all.length} টা | মোট সিট: ${all.reduce((a,b)=>a+b.seats.length,0)} টা</h3>`;
+  all.slice().reverse().forEach((b,idx)=>{
+    let realIdx=all.length-1-idx;
+    html+=`<div class="bookItem">👤 <b>${b.n}</b> - ${b.p}<br>🚌 ${b.bus} | 📅 ${b.dt} | 📍 ${b.b}<br>💺 সিট: <b style="color:#d32f2f">${b.seats.join(', ')}</b> | 💰 ${b.tot} টাকা<br><small>${b.time||''}</small><br>
+    <button class="smallBtn" style="background:#0d5c3f;color:#fff" onclick="viewTicket(${realIdx})">🎫 টিকেট + QR দেখো</button>
+    <button class="smallBtn" style="background:#d32f2f;color:#fff" onclick="deleteBooking(${realIdx})">❌ বাতিল</button></div>`;
+  });
+  el.innerHTML=html;
+}
+function viewTicket(i){ let b=getBookings()[i]; if(b) showTicket(b); }
+function deleteBooking(i){
+  if(!confirm('এই বুকিংটা বাতিল করবা? সিট আবার খালি হয়ে যাবে।')) return;
+  let all=getBookings(); all.splice(i,1); saveBookings(all); loadBooked(); alert('বুকিং বাতিল হয়ে গেছে, সিট খালি।');
+}
 function adminClear(){
-  let pass=prompt('এডমিন পাসওয়ার্ড দাও (তোমার মোবাইলের শেষ ৬ ডিজিট: 531510)');
+  let pass=prompt('এডমিন পাসওয়ার্ড দাও (531510)');
   if(pass!=='531510'){ alert('ভুল পাসওয়ার্ড!'); return; }
-  let key=getKey(); let all=getBooked(); delete all[key]; saveBooked(all); loadBooked(); alert('এই গাড়ী + তারিখের সব বুকিং খালি হয়ে গেছে। এখন আবার বুক করা যাবে।');
+  if(!confirm('এই গাড়ী + তারিখের সব বুকিং খালি করবা?')) return;
+  let key=getKey(); let all=getBookings().filter(b=>(b.bus+'|'+b.dt)!==key); saveBookings(all); loadBooked(); alert('এই গাড়ী + তারিখের সব বুকিং খালি হয়ে গেছে।');
 }
 loadBooked();
 </script>
 </body>
-                                                                                                                                                                                                                                                            </html>
+                                     </html>
