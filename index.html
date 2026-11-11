@@ -22,6 +22,7 @@ input,select{width:100%;padding:11px;margin:6px 0 12px;border:1px solid #ddd;bor
 .ticket{border:2px dashed #8b1e1e;padding:12px;border-radius:10px;text-align:center}
 .ticket h3{margin:0;color:#8b1e1e}
 #qrcode{display:flex;justify-content:center;margin:10px 0}
+#qrcode img{width:180px;height:180px}
 video{width:100%;border-radius:10px;background:#000}
 .ok{color:green;font-weight:bold;font-size:20px}
 </style>
@@ -69,15 +70,16 @@ document.getElementById('t2').className=n==2?'on':'';
 function makeTicket(){
 let n=document.getElementById('name').value, p=document.getElementById('phone').value, s=document.getElementById('seat').value, f=document.getElementById('fare').value, d=document.getElementById('date').value;
 if(!n||!s){alert('নাম আর সিট দিন');return;}
-lastText="নূরমহল টিকিট | নাম:"+n+" | মোবাইল:"+p+" | সিট:"+s+" | ভাড়া:"+f+" টাকা | তারিখ:"+d;
+lastText="NURMAHAL TICKET | Name:"+n+" | Phone:"+p+" | Seat:"+s+" | Fare:"+f+" Taka | Date:"+d;
 document.getElementById('tInfo').innerHTML="<b>"+n+"</b><br>মোবাইল: "+p+"<br>সিট: "+s+" | ভাড়া: "+f+" টাকা<br>তারিখ: "+d;
 document.getElementById('result').style.display='block';
-document.getElementById('qrcode').innerHTML="<img src='https://api.qrserver.com/v1/create-qr-code/?size=180x180&data="+encodeURIComponent(lastText)+"'>";
+let qrData = "NURMAHAL-" + s + "-" + p + "-" + d;
+document.getElementById('qrcode').innerHTML="<img src='https://api.qrserver.com/v1/create-qr-code/?size=180x180&data="+encodeURIComponent(qrData)+"'>";
 }
 function sendWhats(){
 let p=document.getElementById('phone').value;
 if(!p){alert('মোবাইল নম্বর দিন');return;}
-let msg=encodeURIComponent("🚌 নূরমহল সুরেশ্বর বাস কাফেলা - টিকিট\n"+lastText);
+let msg=encodeURIComponent("NURMAHAL TICKET\n"+lastText);
 window.open("https://wa.me/88"+p+"?text="+msg,"_blank");
 }
 function startScan(){
