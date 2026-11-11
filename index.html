@@ -2,94 +2,95 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>নূরমহল সুরেশ্বর বাস কাফেলা</title>
 <style>
-body{margin:0;font-family:sans-serif;background:#f3efe9}
-.top{background:#8b1e1e;color:#fff;text-align:center;padding:20px}
+body{margin:0;font-family:sans-serif;background:#f2f2f2}
+.top{background:#8b1e1e;color:#fff;text-align:center;padding:15px}
 .top h1{margin:0;font-size:24px}.top p{margin:5px 0 0}
 .tabs{display:flex;gap:8px;padding:12px}
-.tabs button{flex:1;padding:12px;border:0;border-radius:10px;font-size:16px;font-weight:700;background:#eadfd8}
+.tabs button{flex:1;padding:12px;border:1px solid #ddd;background:#fff;border-radius:10px;font-size:16px}
 .tabs button.on{background:#8b1e1e;color:#fff}
-.card{background:#fff;margin:0 12px 12px;padding:16px;border-radius:16px}
-label{font-size:14px;color:#555}input,select{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #ccc;border-radius:10px;font-size:16px;box-sizing:border-box}
+.card{background:#fff;margin:0 12px 12px;padding:14px;border-radius:12px}
+label{font-size:14px;color:#555}
+input,select{width:100%;padding:11px;margin:6px 0 12px;border:1px solid #ddd;border-radius:8px;font-size:16px;box-sizing:border-box}
 .row{display:flex;gap:10px}.row>div{flex:1}
-.btn{width:100%;background:#8b1e1e;color:#fff;border:0;padding:14px;border-radius:12px;font-size:18px;font-weight:700}
-.ticket{border:2px dashed #8b1e1e;padding:14px;border-radius:12px;text-align:center;margin-top:14px}
-.small{font-size:13px;color:#666}
-.item{border-bottom:1px solid #eee;padding:10px 0}
-.used{color:red;font-weight:700}.ok{color:green;font-weight:700}
+.btn{width:100%;padding:14px;border:0;border-radius:10px;font-size:17px;font-weight:bold;cursor:pointer}
+.btn-red{background:#8b1e1e;color:#fff}
+.btn-green{background:#25D366;color:#fff;margin-top:10px}
+.btn-blue{background:#007bff;color:#fff;margin-top:10px}
+.ticket{border:2px dashed #8b1e1e;padding:12px;border-radius:10px;text-align:center}
+.ticket h3{margin:0;color:#8b1e1e}
+#qrcode{display:flex;justify-content:center;margin:10px 0}
+video{width:100%;border-radius:10px;background:#000}
+.ok{color:green;font-weight:bold;font-size:20px}
 </style>
 </head>
 <body>
-<div class="top"><h1>নূরমহল সুরেশ্বর বাস কাফেলা</h1><p>ডিজিটাল টিকিট ও QR যাচাই ব্যবস্থা</p></div>
+<div class="top"><h1>🚌 নূরমহল সুরেশ্বর বাস কাফেলা</h1><p>ডিজিটাল টিকিট সিস্টেম</p></div>
+
 <div class="tabs">
-<button id="t1" class="on" onclick="show(1)">টিকিট তৈরি</button>
-<button id="t2" onclick="show(2)">QR স্ক্যান</button>
-<button id="t3" onclick="show(3)">টিকিট তালিকা</button>
+<button id="t1" class="on" onclick="showTab(1)">🎫 টিকিট বানান</button>
+<button id="t2" onclick="showTab(2)">📷 QR স্ক্যান করুন</button>
 </div>
-<div id="p1" class="card">
-<h2>নতুন টিকিট</h2>
-<div class="row"><div><label>যাত্রীর নাম</label><input id="name" value="শিলা আক্তার"></div>
-<div><label>মোবাইল</label><input id="phone" value="01930143557"></div></div>
-<div class="row"><div><label>তারিখ</label><input id="date" type="date" value="2026-11-12"></div>
-<div><label>সময়</label><input id="time" value="10:00 AM"></div></div>
-<div class="row"><div><label>কোথা থেকে</label><input id="from" value="গৌরীপুর"></div>
-<div><label>কোথায়</label><input id="to" value="সুরেশ্বর দরবার"></div></div>
-<div class="row"><div><label>আসন নম্বর</label><input id="seat" value="C-1"></div>
-<div><label>ভাড়া (৳)</label><input id="fare" value="510"></div></div>
-<button class="btn" onclick="makeTicket()">টিকিট তৈরি করুন</button>
-<div id="out"></div>
-<p class="small">ডেটা এই ফোনের ব্রাউজারে থাকে।</p>
+
+<div id="tab1" class="card">
+<label>যাত্রীর নাম</label><input id="name" placeholder="নাম লিখুন">
+<div class="row"><div><label>মোবাইল</label><input id="phone" placeholder="01XXXXXXXXX"></div><div><label>সিট নং</label><input id="seat" placeholder="যেমন A1"></div></div>
+<div class="row"><div><label>ভাড়া (টাকা)</label><input id="fare" type="number" placeholder="500"></div><div><label>তারিখ</label><input id="date" type="date"></div></div>
+<button class="btn btn-red" onclick="makeTicket()">টিকিট বানান</button>
+<div id="result" style="display:none;margin-top:15px">
+<div class="ticket" id="ticketBox">
+<h3>🚌 নূরমহল সুরেশ্বর বাস কাফেলা</h3>
+<p id="tInfo"></p>
+<div id="qrcode"></div>
+<p style="font-size:13px;color:#555">এই QR টা স্ক্যান করলেই যাচাই হবে</p>
 </div>
-<div id="p2" class="card" style="display:none">
-<h2>QR / কোড দিয়ে যাচাই</h2>
-<label>টিকিট কোড লিখুন (যেমন NS-1234)</label>
-<input id="code" placeholder="NS-...">
-<button class="btn" onclick="checkTicket()">যাচাই করুন</button>
-<div id="checkOut"></div>
+<button class="btn btn-green" onclick="sendWhats()">📱 WhatsApp এ পাঠান</button>
+<button class="btn btn-blue" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
 </div>
-<div id="p3" class="card" style="display:none">
-<h2>টিকিট তালিকা</h2>
-<div id="list"></div>
-<button class="btn" style="background:#333;margin-top:10px" onclick="clearAll()">সব মুছে ফেলুন</button>
 </div>
+
+<div id="tab2" class="card" style="display:none">
+<button class="btn btn-red" onclick="startScan()">📷 ক্যামেরা চালু করুন</button>
+<video id="video" playsinline style="display:none;margin-top:10px"></video>
+<div id="scanResult" style="margin-top:12px;text-align:center"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
-function getAll(){try{return JSON.parse(localStorage.getItem('ns_tickets')||'[]')}catch(e){return []}}
-function saveAll(a){localStorage.setItem('ns_tickets',JSON.stringify(a))}
-function show(n){
- [1,2,3].forEach(i=>{
-  document.getElementById('p'+i).style.display=(i==n?'block':'none');
-  document.getElementById('t'+i).className=(i==n?'on':'');
- });
- if(n==3) renderList();
+let lastText="";
+function showTab(n){
+document.getElementById('tab1').style.display=n==1?'block':'none';
+document.getElementById('tab2').style.display=n==2?'block':'none';
+document.getElementById('t1').className=n==1?'on':'';
+document.getElementById('t2').className=n==2?'on':'';
 }
 function makeTicket(){
- var id='NS-'+Math.floor(1000+Math.random()*9000);
- var t={id:id,name:document.getElementById('name').value,phone:document.getElementById('phone').value,date:document.getElementById('date').value,time:document.getElementById('time').value,from:document.getElementById('from').value,to:document.getElementById('to').value,seat:document.getElementById('seat').value,fare:document.getElementById('fare').value,used:false};
- if(!t.name||!t.seat){alert('নাম আর সিট দাও');return;}
- var a=getAll(); a.push(t); saveAll(a);
- var qr='https://api.qrserver.com/v1/create-qr-code/?size=220x220&data='+encodeURIComponent(id);
- document.getElementById('out').innerHTML='<div class="ticket"><h3>'+t.name+'</h3><p>'+t.from+' → '+t.to+' | '+t.date+' '+t.time+'</p><p>সিট: <b>'+t.seat+'</b> | ভাড়া: '+t.fare+' টাকা | ফোন: '+t.phone+'</p><p>কোড: <b>'+id+'</b></p><img src="'+qr+'"><p class="small">এই QR টা স্ক্যান করলেই যাচাই হবে</p></div>';
- document.getElementById('code').value=id;
- alert('টিকিট হয়ে গেছে! কোড: '+id);
+let n=document.getElementById('name').value, p=document.getElementById('phone').value, s=document.getElementById('seat').value, f=document.getElementById('fare').value, d=document.getElementById('date').value;
+if(!n||!s){alert('নাম আর সিট দিন');return;}
+lastText="নূরমহল টিকিট | নাম:"+n+" | মোবাইল:"+p+" | সিট:"+s+" | ভাড়া:"+f+" টাকা | তারিখ:"+d;
+document.getElementById('tInfo').innerHTML="<b>"+n+"</b><br>মোবাইল: "+p+"<br>সিট: "+s+" | ভাড়া: "+f+" টাকা<br>তারিখ: "+d;
+document.getElementById('result').style.display='block';
+document.getElementById('qrcode').innerHTML="";
+new QRCode(document.getElementById('qrcode'),{text:lastText,width:160,height:160});
 }
-function checkTicket(){
- var code=document.getElementById('code').value.trim().toUpperCase();
- var a=getAll(); var t=a.find(x=>x.id==code);
- var el=document.getElementById('checkOut');
- if(!t){el.innerHTML='<p class="used">❌ এই কোডের কোনো টিকিট পাওয়া যায়নি</p>';return;}
- if(t.used){el.innerHTML='<p class="used">⛔ এই টিকিট ইতিমধ্যে ব্যবহৃত! '+t.name+' - সিট '+t.seat+'</p>';return;}
- t.used=true; saveAll(a);
- el.innerHTML='<p class="ok">✅ যাচাই সফল!</p><p>'+t.name+' | সিট '+t.seat+' | '+t.from+' → '+t.to+'<br>'+t.date+' '+t.time+' | ভাড়া '+t.fare+'</p>';
+function sendWhats(){
+let p=document.getElementById('phone').value;
+if(!p){alert('মোবাইল নম্বর দিন');return;}
+let msg=encodeURIComponent("🚌 নূরমহল সুরেশ্বর বাস কাফেলা - টিকিট\n"+lastText);
+window.open("https://wa.me/88"+p+"?text="+msg,"_blank");
 }
-function renderList(){
- var a=getAll(); var el=document.getElementById('list');
- if(!a.length){el.innerHTML='কোনো টিকিট নাই';return;}
- el.innerHTML=a.map(x=>'<div class="item"><b>'+x.id+'</b> - '+x.name+' - সিট '+x.seat+'<br>'+(x.used?'<span class="used">ব্যবহৃত</span>':'<span class="ok">অব্যবহৃত</span>')+' | <a href="#" onclick="fillCode(\''+x.id+'\')">যাচাই করো</a></div>').reverse().join('');
+function startScan(){
+document.getElementById('video').style.display='block';
+let qr=new Html5Qrcode("video");
+qr.start({facingMode:"environment"},{fps:10,qrbox:250},(txt)=>{
+qr.stop();
+document.getElementById('scanResult').innerHTML="<div class='ok'>✅ টিকিট সঠিক!</div><p>"+txt+"</p>";
+}).catch(e=>{alert('ক্যামেরা চালু হয় নাই, অনুমতি দিন')});
 }
-function fillCode(id){document.getElementById('code').value=id;show(2);}
-function clearAll(){if(confirm('সব মুছবা?')){saveAll([]);renderList();}}
+document.getElementById('date').valueAsDate=new Date();
 </script>
 </body>
 </html>
