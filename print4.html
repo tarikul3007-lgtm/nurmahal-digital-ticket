@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>নূরমহল - ১টা করে টিকেট - স্কয়ার</title>
+<title>নূরমহল - সিট প্ল্যান দিয়ে কাটো, টিকেটে প্ল্যান নাই</title>
 <style>
 *{box-sizing:border-box} body{font-family:sans-serif;background:#eef2f7;margin:0;padding:12px}
 .form{background:#fff;max-width:480px;margin:0 auto 14px;padding:16px;border-radius:16px;box-shadow:0 4px 16px #0001}
@@ -14,13 +14,13 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .btn{width:100%;padding:14px;background:#0d5c3f;color:#fff;border:0;border-radius:12px;font-size:17px;font-weight:bold;margin-top:14px;cursor:pointer}
 .btnPrint{width:100%;max-width:480px;margin:0 auto 12px;display:block;padding:14px;background:#e8a91c;color:#000;border:0;border-radius:12px;font-size:17px;font-weight:bold;cursor:pointer}
 .page{max-width:480px;margin:0 auto}
-.ticket{border:2.5px solid #0d3a6b;border-radius:16px;overflow:hidden;background:#fff;display:flex;flex-direction:column;aspect-ratio:1/1.05}
+.ticket{border:2.5px solid #0d3a6b;border-radius:16px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
 .head{background:linear-gradient(90deg,#0d3a6b,#155e9e);color:#fff;padding:10px 12px;display:flex;gap:10px;align-items:center}
 .head .bus{font-size:30px;background:#fff;border-radius:10px;padding:4px 7px;flex-shrink:0;line-height:1}
 .head h3{margin:0;font-size:19px;line-height:1.2;white-space:nowrap}
 .head p{margin:3px 0 0;font-size:11.5px;color:#ffe58a;white-space:nowrap}
 .gold{height:6px;background:linear-gradient(90deg,#e8a91c,#ffcf3f)}
-.body{padding:12px 14px 9px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.body{padding:12px 14px 9px;flex:1;display:flex;flex-direction:column}
 .trow{display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:14px;color:#0d3a6b}
 .trow span:last-child{background:#e8f5e9;padding:3px 10px;border-radius:20px;white-space:nowrap}
 .gariRow{background:#fff2a8;border:1.5px solid #e8a91c;border-radius:9px;text-align:center;font-weight:900;font-size:16px;color:#0d3a6b;padding:6px;margin-top:9px}
@@ -33,18 +33,26 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .qrBox{text-align:center;flex-shrink:0}
 .qrBox img{width:78px;height:78px;border:2px solid #0d3a6b;border-radius:8px}
 .qrBox p{margin:3px 0 0;font-size:10px;font-weight:bold;color:#0d5c3f;white-space:nowrap}
-.foot{background:#e8f5e9;color:#0d5c3f;text-align:center;font-size:12.5px;font-weight:bold;padding:7px;border-top:1.5px solid #e8a91c;line-height:1.5;white-space:nowrap;overflow:hidden}
+.foot{background:#e8f5e9;color:#0d5c3f;text-align:center;font-size:12.5px;font-weight:bold;padding:7px;border-top:1.5px solid #e8a91c;line-height:1.5;white-space:nowrap;overflow:hidden;margin-top:10px}
+/* কাটার সময়ের সিট প্ল্যান - শুধু ফরমে, টিকেটে আসবে না */
+.planBox{margin-top:12px;border:1.5px dashed #0d3a6b;border-radius:12px;padding:10px;background:#f7f9ff}
+.planTitle{text-align:center;font-size:13px;font-weight:900;color:#0d3a6b;margin-bottom:8px}
+.planGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.pSeat{text-align:center;font-size:13px;font-weight:bold;padding:10px 0;border-radius:8px;border:1.5px solid #ccc;background:#fff;cursor:pointer}
+.pSeat.sel{background:#d32f2f;color:#fff;border-color:#d32f2f}
+.pSeat.driver{background:#0d3a6b;color:#fff;cursor:default}
+.planNote{text-align:center;font-size:11px;color:#555;margin-top:6px}
 @media print{
   body{background:#fff;padding:0;display:flex;justify-content:center;align-items:flex-start} .form,.btnPrint,.hidePrint{display:none!important}
   .page{max-width:90mm;width:90mm;padding:0;margin:0}
-  @page{size:A4;margin:10mm} .ticket{break-inside:avoid;aspect-ratio:1/1.05}
+  @page{size:A4;margin:8mm} .ticket{break-inside:avoid}
 }
 </style>
 </head>
 <body>
 <div class="form hidePrint">
 <h2>🚌 নূরমহল - ১টা করে টিকেট</h2>
-<p>প্রতি সিটের জন্য ১টা করে বানাও, ১টা করে প্রিন্ট দাও</p>
+<p>সিট প্ল্যান দেখে সিট বাছো, টিকেটে প্ল্যান আসবে না</p>
 <div class="grid2">
 <div><label>টিকেট নং</label><input id="inNo" type="number" value="1"></div>
 <div><label>যাত্রার তারিখ</label><input id="inDate" type="date"></div>
@@ -59,15 +67,34 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <div><label>উঠার স্থান</label><select id="inBoard"><option>গৌরীপুর</option><option>শম্ভুগঞ্জ</option><option>ময়মনসিংহ</option><option>উত্তরা</option><option>গাজীপুর</option><option>ঢাকা</option><option>সুরেশ্বর</option></select></div>
 </div>
 <div class="grid2">
-<div><label>সিট নং</label><input id="inSeat" placeholder="যেমন: A-1"></div>
+<div><label>সিট নং</label><input id="inSeat" placeholder="যেমন: A-1" value="A-1" readonly></div>
 <div><label>ভাড়া</label><select id="inVara"><option>১০২০ টাকা</option><option>৮০০ টাকা</option><option>৬০০ টাকা</option><option>৫০০ টাকা</option></select></div>
 </div>
+
+<!-- কাটার সময় সিট প্ল্যান -->
+<div class="planBox">
+<div class="planTitle">🪑 সিট প্ল্যান - সিটে ক্লিক করে বাছো (টিকেটে আসবে না)</div>
+<div class="planGrid" id="planGrid"></div>
+<div class="planNote">লাল সিট = তুমি যেইটা বাছছো</div>
+</div>
+
 <button class="btn" onclick="make()">✅ এই টিকেটটা বানাও</button>
 </div>
 <button class="btnPrint hidePrint" onclick="window.print()">🖨️ এই ১টা টিকেট প্রিন্ট করো</button>
 <div class="page" id="page"></div>
 <script>
 function toBn(n){return String(n).replace(/[0-9]/g,d=>"০১২৩৪৫৬৭৮৯"[d])}
+let allSeats=['A-1','A-2','A-3','A-4','B-1','B-2','B-3','B-4','C-1','C-2','C-3','C-4','D-1','D-2','D-3','D-4'];
+let curSeat='A-1';
+function drawPlan(){
+  let h='<div class="pSeat driver">🚍<br>ড্রাইভার</div><div class="pSeat" style="visibility:hidden"></div><div class="pSeat" style="visibility:hidden"></div><div class="pSeat" style="visibility:hidden"></div>';
+  allSeats.forEach(s=>{
+    h+=`<div class="pSeat ${s===curSeat?'sel':''}" onclick="pickSeat('${s}')">${s}</div>`;
+  });
+  document.getElementById('planGrid').innerHTML=h;
+}
+function pickSeat(s){curSeat=s;document.getElementById('inSeat').value=s;drawPlan();}
+drawPlan();
 function make(){
   let no=String(parseInt(document.getElementById('inNo').value)||1).padStart(3,'0');
   let gari=document.getElementById('inGari').value||'১';
@@ -77,7 +104,7 @@ function make(){
   let dt=document.getElementById('inDate').value||'---';
   let board=document.getElementById('inBoard').value;
   let vara=document.getElementById('inVara').value;
-  let seat=(document.getElementById('inSeat').value||'---').toUpperCase();
+  let seat=(document.getElementById('inSeat').value||'A-1').toUpperCase();
   let qr=`NURMAHAL | NO.${no} | Gari No:${gari} | ${nm} | ${ph} | ${dt} | Seat:${seat} | ${vara}`;
   document.getElementById('page').innerHTML=`<div class="ticket">
       <div class="head"><div class="bus">🚌</div><div><h3>নূরমহল সুরেশ্বর বাস কাফেলা</h3><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ</p></div></div>
@@ -90,7 +117,7 @@ function make(){
         <div class="frow"><div>উঠার স্থান: <b>${board}</b></div><div>ভাড়া: <b>${toBn(vara)}</b></div></div>
         <div class="seatRow"><div class="seatBox"><div class="lbl">সিট নং</div><div class="val">${seat}</div></div>
         <div class="qrBox"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qr)}"><p>টিকেট অনলাইন চেকিং হবে</p></div></div>
-        </div><div class="foot">🙏 আপনার যাত্রা নিরাপদ হোক | তরিকুল ০১৯২৩-৫৩১৫১০</div>
+        </div><div class="foot">🙏 আপনার যাত্রা শুভ হোক | তরিকুল ০১৯২৩-৫৩১৫১০</div>
       </div></div>`;
   document.getElementById('page').scrollIntoView({behavior:'smooth'});
 }
