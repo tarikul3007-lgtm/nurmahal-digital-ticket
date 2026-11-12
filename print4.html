@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>নূরমহল - ১ টিকেট - A4 তে ৪টা</title>
+<style>
+*{box-sizing:border-box} body{font-family:sans-serif;background:#eef2f7;margin:0;padding:12px}
+.form{background:#fff;max-width:700px;margin:0 auto 14px;padding:16px;border-radius:16px;box-shadow:0 4px 16px #0001}
+.form h2{text-align:center;margin:0 0 12px;color:#0d3a6b}
+label{font-size:13px;font-weight:bold;display:block;margin-top:8px} input,select{width:100%;padding:11px;border:1.5px solid #ddd;border-radius:10px;font-size:15px;margin-top:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{width:100%;padding:14px;background:#0d5c3f;color:#fff;border:0;border-radius:12px;font-size:17px;font-weight:bold;margin-top:12px;cursor:pointer}
+.btnPrint{width:100%;max-width:700px;margin:0 auto 12px;display:block;padding:14px;background:#e8a91c;color:#000;border:0;border-radius:12px;font-size:17px;font-weight:bold;cursor:pointer}
+.page{max-width:800px;margin:0 auto;background:#fff;padding:8px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ticket{border:2.5px solid #0d3a6b;border-radius:16px;overflow:hidden;background:#fff}
+.head{background:linear-gradient(90deg,#0d3a6b,#155e9e);color:#fff;padding:12px;display:flex;gap:10px;align-items:center}
+.head .bus{font-size:32px;background:#fff;border-radius:10px;padding:4px 8px}
+.head h3{margin:0;font-size:16px;line-height:1.2}
+.head p{margin:3px 0 0;font-size:11px;color:#ffe58a}
+.gold{height:7px;background:linear-gradient(90deg,#e8a91c,#ffcf3f)}
+.body{padding:14px 16px 8px}
+.trow{display:flex;justify-content:space-between;font-weight:bold;font-size:13px;color:#0d3a6b}
+.trow span:last-child{background:#e8f5e9;padding:3px 10px;border-radius:20px}
+.frow{display:flex;gap:16px;margin-top:11px;font-size:14px}
+.frow div{flex:1;border-bottom:1px dashed #bbb;padding-bottom:4px}
+.seatRow{display:flex;align-items:center;gap:12px;margin-top:14px}
+.seatBox{flex:1;background:#fff2a8;border:2px solid #e8a91c;border-radius:12px;padding:10px;text-align:center}
+.seatBox .lbl{font-size:12px;font-weight:bold;color:#555}
+.seatBox .val{font-size:28px;font-weight:900;color:#d32f2f;letter-spacing:1px}
+.qrBox{text-align:center}
+.qrBox img{width:78px;height:78px;border:2px solid #0d3a6b;border-radius:8px}
+.qrBox p{margin:3px 0 0;font-size:10px;font-weight:bold;color:#0d5c3f}
+.foot{background:#e8f5e9;color:#0d5c3f;text-align:center;font-size:13px;font-weight:bold;padding:9px;margin-top:10px;border-top:1.5px solid #e8a91c;line-height:1.6}
+@media print{
+  body{background:#fff;padding:0} .form,.btnPrint,.hidePrint{display:none!important}
+  .page{max-width:100%;padding:5mm;gap:5mm} @page{size:A4;margin:5mm} .ticket{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="form hidePrint">
+<h2>🚌 নূরমহল - ১টা টিকেট বানাও</h2>
+<div class="grid2">
+<div><label>টিকিট নং</label><input id="inNo" type="number" value="1"></div>
+<div><label>যাত্রার তারিখ</label><input id="inDate" type="date"></div>
+</div>
+<div class="grid2">
+<div><label>নাম</label><input id="inName" placeholder="যাত্রীর নাম"></div>
+<div><label>ঠিকানা</label><select id="inThikana" onchange="addNew(this)"><option>গৌরীপুর</option><option>ভাংনামারী</option><option>ঈশ্বরগঞ্জ</option><option>কুমরীকান্দা</option><option>মাঝিপাড়া</option><option>আললপুর</option><option>চায়নামোড়</option><option>তারাকান্দা</option><option>হালুয়াঘাট</option><option>হোসেনপুর</option><option>গাজীপুর</option><option value="__new">➕ নতুন ঠিকানা যোগ করো</option></select></div>
+</div>
+<div class="grid2">
+<div><label>মোবা</label><input id="inPhone" placeholder="০১XXXXXXXXX"></div>
+<div><label>সিট নং</label><input id="inSeat" placeholder="যেমন: A-1"></div>
+</div>
+<div class="grid2">
+<div><label>উঠার স্থান</label><select id="inBoard" onchange="addNew(this)"><option>গৌরীপুর</option><option>শম্ভুগঞ্জ</option><option>ময়মনসিংহ</option><option>উত্তরা</option><option>গাজীপুর</option><option>ঢাকা</option><option>সুরেশ্বর</option><option value="__new">➕ নতুন স্থান যোগ করো</option></select></div>
+<div><label>ভাড়া</label><select id="inVara" onchange="addNew(this)"><option>১০২০ টাকা</option><option>৮০০ টাকা</option><option>৬০০ টাকা</option><option>৫০০ টাকা</option><option value="__new">➕ নতুন ভাড়া যোগ করো</option></select></div>
+</div>
+<button class="btn" onclick="make()">✅ টিকেট বানাও - A4 তে ৪টা আসবে</button>
+</div>
+<button class="btnPrint hidePrint" onclick="window.print()">🖨️ প্রিন্ট করো - A4 তে ৪টা</button>
+<div class="page" id="page"></div>
+<script>
+function toBn(n){return String(n).replace(/[0-9]/g,d=>"০১২৩৪৫৬৭৮৯"[d])}
+function addNew(sel){
+  if(sel.value==='__new'){
+    let v=prompt('নতুন নাম লিখো:');
+    if(v){ let o=document.createElement('option'); o.text=v; o.selected=true; sel.insertBefore(o, sel.querySelector('option[value="__new"]')); }
+    else sel.selectedIndex=0;
+  }
+}
+function make(){
+  let no=String(parseInt(document.getElementById('inNo').value)||1).padStart(3,'0');
+  let nm=document.getElementById('inName').value||'---';
+  let th=document.getElementById('inThikana').value;
+  let ph=document.getElementById('inPhone').value||'---';
+  let dt=document.getElementById('inDate').value||'---';
+  let board=document.getElementById('inBoard').value;
+  let vara=document.getElementById('inVara').value;
+  let seat=(document.getElementById('inSeat').value||'---').toUpperCase();
+  let qr=`NURMAHAL | NO.${no} | ${nm} | ${ph} | ${dt} | Seat:${seat} | ${vara}`;
+  let one=`<div class="ticket">
+      <div class="head"><div class="bus">🚌</div><div><h3>নূরমহল সুরেশ্বর বাস কাফেলা</h3><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ</p></div></div>
+      <div class="gold"></div>
+      <div class="body">
+        <div class="trow"><span>টিকিট নং: ${toBn(no)}</span><span>NO. ${no}</span></div>
+        <div class="frow"><div>নাম: <b>${nm}</b></div><div>ঠিকানা: <b>${th}</b></div></div>
+        <div class="frow"><div>মোবা: <b>${toBn(ph)}</b></div><div>যাত্রার তারিখ: <b>${toBn(dt)}</b></div></div>
+        <div class="frow"><div>উঠার স্থান: <b>${board}</b></div><div>ভাড়া: <b>${toBn(vara)}</b></div></div>
+        <div class="seatRow">
+          <div class="seatBox"><div class="lbl">সিট নং</div><div class="val">${seat}</div></div>
+          <div class="qrBox"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qr)}"><p>টিকেট অনলাইন চেকিং হবে</p></div>
+        </div>
+        <div class="foot">🙏 আপনার যাত্রা নিরাপদ হোক<br>প্রয়োজনে: মোঃ তরিকুল ইসলাম সুরেশ্বরী ০১৯২৩-৫৩১৫১০</div>
+      </div>
+    </div>`;
+  document.getElementById('page').innerHTML=one+one+one+one;
+  document.getElementById('page').scrollIntoView({behavior:'smooth'});
+}
+make();
+</script>
+</body>
+                        </html>
