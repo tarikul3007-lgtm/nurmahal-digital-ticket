@@ -3,90 +3,88 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>নূরমহল - ৪ সিট - ৪ আলাদা টিকেট - স্কয়ার</title>
+<title>নূরমহল - ১টা করে টিকেট - স্কয়ার</title>
 <style>
 *{box-sizing:border-box} body{font-family:sans-serif;background:#eef2f7;margin:0;padding:12px}
-.form{background:#fff;max-width:680px;margin:0 auto 14px;padding:16px;border-radius:16px;box-shadow:0 4px 16px #0001}
+.form{background:#fff;max-width:480px;margin:0 auto 14px;padding:16px;border-radius:16px;box-shadow:0 4px 16px #0001}
 .form h2{text-align:center;margin:0 0 8px;color:#0d3a6b;font-size:18px}
 .form p{text-align:center;margin:0 0 10px;font-size:13px;color:#555}
 label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,select{width:100%;padding:11px;border:1.5px solid #ddd;border-radius:10px;font-size:15px;margin-top:4px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.grid4{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.seatCard{background:#f7f9ff;border:1.5px solid #cdd8ff;border-radius:12px;padding:10px;margin-top:10px}
-.seatCard b{color:#0d3a6b;font-size:14px}
 .btn{width:100%;padding:14px;background:#0d5c3f;color:#fff;border:0;border-radius:12px;font-size:17px;font-weight:bold;margin-top:14px;cursor:pointer}
-.btnPrint{width:100%;max-width:680px;margin:0 auto 12px;display:block;padding:14px;background:#e8a91c;color:#000;border:0;border-radius:12px;font-size:17px;font-weight:bold;cursor:pointer}
-.page{max-width:680px;margin:0 auto;background:#fff;padding:8px;display:grid;grid-template-columns:1fr;gap:12px}
-.ticket{border:2.5px solid #0d3a6b;border-radius:14px;overflow:hidden;background:#fff;display:flex;flex-direction:column;aspect-ratio:1/1.02}
-.head{background:linear-gradient(90deg,#0d3a6b,#155e9e);color:#fff;padding:8px 10px;display:flex;gap:9px;align-items:center}
-.head .bus{font-size:26px;background:#fff;border-radius:9px;padding:3px 6px;flex-shrink:0;line-height:1}
-.head h3{margin:0;font-size:17px;line-height:1.2;white-space:nowrap}
-.head p{margin:2px 0 0;font-size:10.5px;color:#ffe58a;white-space:nowrap}
-.gold{height:5px;background:linear-gradient(90deg,#e8a91c,#ffcf3f)}
-.body{padding:9px 12px 7px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
-.trow{display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:12.5px;color:#0d3a6b}
-.trow span:last-child{background:#e8f5e9;padding:2px 9px;border-radius:20px;white-space:nowrap}
-.frow{display:flex;gap:14px;margin-top:7px;font-size:13px}
-.frow div{flex:1;border-bottom:1px dashed #bbb;padding-bottom:3px;min-width:0;word-break:break-word}
-.seatRow{display:flex;align-items:center;gap:10px;margin-top:9px}
-.seatBox{flex:1;background:#fff2a8;border:2px solid #e8a91c;border-radius:10px;padding:7px;text-align:center}
-.seatBox .lbl{font-size:11px;font-weight:bold;color:#555}
-.seatBox .val{font-size:28px;font-weight:900;color:#d32f2f;line-height:1.1}
+.btnPrint{width:100%;max-width:480px;margin:0 auto 12px;display:block;padding:14px;background:#e8a91c;color:#000;border:0;border-radius:12px;font-size:17px;font-weight:bold;cursor:pointer}
+.page{max-width:480px;margin:0 auto}
+.ticket{border:2.5px solid #0d3a6b;border-radius:16px;overflow:hidden;background:#fff;display:flex;flex-direction:column;aspect-ratio:1/1.05}
+.head{background:linear-gradient(90deg,#0d3a6b,#155e9e);color:#fff;padding:10px 12px;display:flex;gap:10px;align-items:center}
+.head .bus{font-size:30px;background:#fff;border-radius:10px;padding:4px 7px;flex-shrink:0;line-height:1}
+.head h3{margin:0;font-size:19px;line-height:1.2;white-space:nowrap}
+.head p{margin:3px 0 0;font-size:11.5px;color:#ffe58a;white-space:nowrap}
+.gold{height:6px;background:linear-gradient(90deg,#e8a91c,#ffcf3f)}
+.body{padding:12px 14px 9px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.trow{display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:14px;color:#0d3a6b}
+.trow span:last-child{background:#e8f5e9;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.gariRow{background:#fff2a8;border:1.5px solid #e8a91c;border-radius:9px;text-align:center;font-weight:900;font-size:16px;color:#0d3a6b;padding:6px;margin-top:9px}
+.frow{display:flex;gap:16px;margin-top:9px;font-size:14px}
+.frow div{flex:1;border-bottom:1px dashed #bbb;padding-bottom:4px;min-width:0;word-break:break-word}
+.seatRow{display:flex;align-items:center;gap:12px;margin-top:11px}
+.seatBox{flex:1;background:#fff2a8;border:2px solid #e8a91c;border-radius:11px;padding:8px;text-align:center}
+.seatBox .lbl{font-size:12px;font-weight:bold;color:#555}
+.seatBox .val{font-size:32px;font-weight:900;color:#d32f2f;line-height:1.1}
 .qrBox{text-align:center;flex-shrink:0}
-.qrBox img{width:68px;height:68px;border:2px solid #0d3a6b;border-radius:7px}
-.qrBox p{margin:2px 0 0;font-size:9px;font-weight:bold;color:#0d5c3f;white-space:nowrap}
-.foot{background:#e8f5e9;color:#0d5c3f;text-align:center;font-size:11.5px;font-weight:bold;padding:6px;border-top:1.5px solid #e8a91c;line-height:1.5;white-space:nowrap;overflow:hidden}
+.qrBox img{width:78px;height:78px;border:2px solid #0d3a6b;border-radius:8px}
+.qrBox p{margin:3px 0 0;font-size:10px;font-weight:bold;color:#0d5c3f;white-space:nowrap}
+.foot{background:#e8f5e9;color:#0d5c3f;text-align:center;font-size:12.5px;font-weight:bold;padding:7px;border-top:1.5px solid #e8a91c;line-height:1.5;white-space:nowrap;overflow:hidden}
 @media print{
-  body{background:#fff;padding:0} .form,.btnPrint,.hidePrint{display:none!important}
-  .page{max-width:100%;padding:5mm;gap:5mm;grid-template-columns:1fr 1fr}
-  @page{size:A4;margin:5mm} .ticket{break-inside:avoid;aspect-ratio:1/1.02}
-  .head h3{font-size:16px}
+  body{background:#fff;padding:0;display:flex;justify-content:center;align-items:flex-start} .form,.btnPrint,.hidePrint{display:none!important}
+  .page{max-width:90mm;width:90mm;padding:0;margin:0}
+  @page{size:A4;margin:10mm} .ticket{break-inside:avoid;aspect-ratio:1/1.05}
 }
 </style>
 </head>
 <body>
 <div class="form hidePrint">
-<h2>🚌 নূরমহল - ৪ সিটের ৪টা আলাদা টিকেট</h2>
-<p>শুরু টিকেট নং দিলেই বাকি ৩টা অটো +১ করে বাড়বে</p>
+<h2>🚌 নূরমহল - ১টা করে টিকেট</h2>
+<p>প্রতি সিটের জন্য ১টা করে বানাও, ১টা করে প্রিন্ট দাও</p>
 <div class="grid2">
-<div><label>শুরু টিকেট নং</label><input id="inNo" type="number" value="1"></div>
+<div><label>টিকেট নং</label><input id="inNo" type="number" value="1"></div>
 <div><label>যাত্রার তারিখ</label><input id="inDate" type="date"></div>
 </div>
+<div><label>🚌 গাড়ি নং</label><select id="inGari"><option>১</option><option>২</option><option>৩</option><option>৪</option><option>৫</option><option>৬</option><option>৭</option><option>৮</option><option>৯</option><option>১০</option></select></div>
 <div class="grid2">
-<div><label>ঠিকানা (সবার একই)</label><select id="inThikana"><option>গৌরীপুর</option><option>ভাংনামারী</option><option>ঈশ্বরগঞ্জ</option><option>কুমরীকান্দা</option><option>মাঝিপাড়া</option><option>আললপুর</option><option>চায়নামোড়</option><option>তারাকান্দা</option><option>হালুয়াঘাট</option><option>হোসেনপুর</option><option>গাজীপুর</option></select></div>
+<div><label>নাম</label><input id="inName" placeholder="যাত্রীর নাম"></div>
+<div><label>মোবা</label><input id="inPhone" placeholder="০১XXXXXXXXX"></div>
+</div>
+<div class="grid2">
+<div><label>ঠিকানা</label><select id="inThikana"><option>গৌরীপুর</option><option>ভাংনামারী</option><option>ঈশ্বরগঞ্জ</option><option>কুমরীকান্দা</option><option>মাঝিপাড়া</option><option>আললপুর</option><option>চায়নামোড়</option><option>তারাকান্দা</option><option>হালুয়াঘাট</option><option>হোসেনপুর</option><option>গাজীপুর</option></select></div>
 <div><label>উঠার স্থান</label><select id="inBoard"><option>গৌরীপুর</option><option>শম্ভুগঞ্জ</option><option>ময়মনসিংহ</option><option>উত্তরা</option><option>গাজীপুর</option><option>ঢাকা</option><option>সুরেশ্বর</option></select></div>
 </div>
-<div><label>ভাড়া (সবার একই)</label><select id="inVara"><option>১০২০ টাকা</option><option>৮০০ টাকা</option><option>৬০০ টাকা</option><option>৫০০ টাকা</option></select></div>
-
-<div class="seatCard"><b>🎫 টিকেট ১</b><div class="grid2"><div><label>নাম</label><input id="n1" placeholder="যাত্রীর নাম"></div><div><label>মোবা</label><input id="p1" placeholder="০১XXXXXXXXX"></div></div><label>সিট নং</label><input id="s1" placeholder="যেমন: A-1" value="A-1"></div>
-<div class="seatCard"><b>🎫 টিকেট ২</b><div class="grid2"><div><label>নাম</label><input id="n2" placeholder="যাত্রীর নাম"></div><div><label>মোবা</label><input id="p2" placeholder="০১XXXXXXXXX"></div></div><label>সিট নং</label><input id="s2" placeholder="যেমন: A-2" value="A-2"></div>
-<div class="seatCard"><b>🎫 টিকেট ৩</b><div class="grid2"><div><label>নাম</label><input id="n3" placeholder="যাত্রীর নাম"></div><div><label>মোবা</label><input id="p3" placeholder="০১XXXXXXXXX"></div></div><label>সিট নং</label><input id="s3" placeholder="যেমন: A-3" value="A-3"></div>
-<div class="seatCard"><b>🎫 টিকেট ৪</b><div class="grid2"><div><label>নাম</label><input id="n4" placeholder="যাত্রীর নাম"></div><div><label>মোবা</label><input id="p4" placeholder="০১XXXXXXXXX"></div></div><label>সিট নং</label><input id="s4" placeholder="যেমন: A-4" value="A-4"></div>
-
-<button class="btn" onclick="make()">✅ ৪টা আলাদা টিকেট বানাও</button>
+<div class="grid2">
+<div><label>সিট নং</label><input id="inSeat" placeholder="যেমন: A-1"></div>
+<div><label>ভাড়া</label><select id="inVara"><option>১০২০ টাকা</option><option>৮০০ টাকা</option><option>৬০০ টাকা</option><option>৫০০ টাকা</option></select></div>
 </div>
-<button class="btnPrint hidePrint" onclick="window.print()">🖨️ প্রিন্ট করো - A4 তে ৪টা স্কয়ার</button>
+<button class="btn" onclick="make()">✅ এই টিকেটটা বানাও</button>
+</div>
+<button class="btnPrint hidePrint" onclick="window.print()">🖨️ এই ১টা টিকেট প্রিন্ট করো</button>
 <div class="page" id="page"></div>
 <script>
 function toBn(n){return String(n).replace(/[0-9]/g,d=>"০১২৩৪৫৬৭৮৯"[d])}
 function make(){
-  let start=parseInt(document.getElementById('inNo').value)||1;
+  let no=String(parseInt(document.getElementById('inNo').value)||1).padStart(3,'0');
+  let gari=document.getElementById('inGari').value||'১';
+  let nm=document.getElementById('inName').value||'---';
+  let ph=document.getElementById('inPhone').value||'---';
   let th=document.getElementById('inThikana').value;
   let dt=document.getElementById('inDate').value||'---';
   let board=document.getElementById('inBoard').value;
   let vara=document.getElementById('inVara').value;
-  let html='';
-  for(let i=1;i<=4;i++){
-    let no=String(start+i-1).padStart(3,'0');
-    let nm=document.getElementById('n'+i).value||'---';
-    let ph=document.getElementById('p'+i).value||'---';
-    let seat=(document.getElementById('s'+i).value||'---').toUpperCase();
-    let qr=`NURMAHAL | NO.${no} | ${nm} | ${ph} | ${dt} | Seat:${seat} | ${vara}`;
-    html+=`<div class="ticket">
+  let seat=(document.getElementById('inSeat').value||'---').toUpperCase();
+  let qr=`NURMAHAL | NO.${no} | Gari No:${gari} | ${nm} | ${ph} | ${dt} | Seat:${seat} | ${vara}`;
+  document.getElementById('page').innerHTML=`<div class="ticket">
       <div class="head"><div class="bus">🚌</div><div><h3>নূরমহল সুরেশ্বর বাস কাফেলা</h3><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ</p></div></div>
       <div class="gold"></div>
       <div class="body"><div>
         <div class="trow"><span>টিকিট নং: ${toBn(no)}</span><span>NO. ${no}</span></div>
+        <div class="gariRow">🚌 গাড়ি নং: ${gari}</div>
         <div class="frow"><div>নাম: <b>${nm}</b></div><div>ঠিকানা: <b>${th}</b></div></div>
         <div class="frow"><div>মোবা: <b>${toBn(ph)}</b></div><div>যাত্রার তারিখ: <b>${toBn(dt)}</b></div></div>
         <div class="frow"><div>উঠার স্থান: <b>${board}</b></div><div>ভাড়া: <b>${toBn(vara)}</b></div></div>
@@ -94,8 +92,6 @@ function make(){
         <div class="qrBox"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qr)}"><p>টিকেট অনলাইন চেকিং হবে</p></div></div>
         </div><div class="foot">🙏 আপনার যাত্রা নিরাপদ হোক | তরিকুল ০১৯২৩-৫৩১৫১০</div>
       </div></div>`;
-  }
-  document.getElementById('page').innerHTML=html;
   document.getElementById('page').scrollIntoView({behavior:'smooth'});
 }
 make();
