@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>নূরমহল - ৫১ সিট + ডাউনলোড + অটো নং</title>
+<title>নূরমহল - ফুল সিস্টেম</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{box-sizing:border-box;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important} body{font-family:sans-serif;background:#eef2f7;margin:0;padding:12px}
@@ -61,20 +61,27 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .recItem{border:1.5px solid #ddd;border-radius:12px;padding:10px;margin-bottom:10px;background:#f9fbff}
 .recItem b{color:#0d3a6b}
 .recItem .del{float:right;background:#d32f2f;color:#fff;border:0;border-radius:8px;padding:6px 10px;font-weight:900;cursor:pointer}
-.recItem .reprint{background:#e8a91c;border:0;border-radius:8px;padding:6px 10px;font-weight:900;cursor:pointer;margin-top:6px}
-.recItem .redown{background:#0d3a6b;color:#fff;border:0;border-radius:8px;padding:6px 10px;font-weight:900;cursor:pointer;margin-top:6px;margin-left:5px}
+.smallBtn{background:#e8a91c;border:0;border-radius:8px;padding:6px 10px;font-weight:900;cursor:pointer;margin-top:6px;margin-right:5px}
+.smallBtn.blue{background:#0d3a6b;color:#fff} .smallBtn.green{background:#25D366;color:#fff}
 .clearAll{width:100%;padding:10px;background:#fff;border:1.5px solid #d32f2f;color:#d32f2f;border-radius:10px;font-weight:900;cursor:pointer}
+.standBtn{width:100%;padding:11px;background:#fff;border:2px dashed #0d3a6b;color:#0d3a6b;border-radius:10px;font-weight:900;margin-top:10px;cursor:pointer}
+.standBtn.on{background:#0d3a6b;color:#fff}
+.listTable{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.listTable th,.listTable td{border:1px solid #ddd;padding:6px;text-align:left}
+.listTable th{background:#0d3a6b;color:#fff}
 @media print{
-  body{background:#fff;padding:0;display:flex;justify-content:center;align-items:flex-start} .form,.btnPrint,.btnDown,.hidePrint,.recBox{display:none!important}
-  .page{max-width:90mm;width:90mm;padding:0;margin:0}
-  @page{size:90mm auto;margin:0} .ticket{break-inside:avoid}
+  body{background:#fff;padding:0} .form,.btnPrint,.btnDown,.hidePrint,.recBox{display:none!important}
+  .page{max-width:100%;width:100%;padding:0;margin:0}
+  @page{size:A4;margin:8mm} .ticket{break-inside:avoid} #printList{display:block!important}
+  #printList table{width:100%;border-collapse:collapse} #printList th,#printList td{border:1px solid #000;padding:6px;font-size:13px}
 }
+#printList{display:none}
 </style>
 </head>
 <body>
 <div class="form hidePrint">
-<h2>🚌 নূরমহল - ৫১ সিট + ডাউনলোড</h2>
-<p>টিকেট নং অটো আসবে | ভাড়া অটো মোট হবে | ডাউনলোড করলে শুধু টিকেটের সাইজে নামবে</p>
+<h2>🚌 নূরমহল - ফুল সিস্টেম</h2>
+<p>টিকেট নং অটো | ভাড়া সিট অনুযায়ী অটো | দাঁড়ানো টিকেট আছে</p>
 <div class="grid2">
 <div><label>টিকেট নং (অটো)</label><input id="inNo" type="text" value="০০১" readonly style="background:#eef2f7;font-weight:900"></div>
 <div><label>যাত্রার তারিখ</label><input id="inDate" type="date"></div>
@@ -82,18 +89,23 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <div><label>🚌 গাড়ি নং</label><select id="inGari"><option>১</option><option>২</option><option>৩</option><option>৪</option><option>৫</option><option>৬</option><option>৭</option><option>৮</option><option>৯</option><option>১০</option></select></div>
 <div class="grid2">
 <div><label>নাম</label><input id="inName" placeholder="যাত্রীর নাম"></div>
-<div><label>মোবা</label><input id="inPhone" placeholder="০১XXXXXXXXX"></div>
+<div><label>মোবা - লিখলেই নাম অটো আসবে</label><input id="inPhone" placeholder="০১XXXXXXXXX" oninput="autoByPhone()"></div>
 </div>
 <div class="grid2">
 <div><label>ঠিকানা</label><select id="inThikana"><option>গৌরীপুর</option><option>ভাংনামারী</option><option>ঈশ্বরগঞ্জ</option><option>কুমরীকান্দা</option><option>মাঝিপাড়া</option><option>আললপুর</option><option>চায়নামোড়</option><option>তারাকান্দা</option><option>হালুয়াঘাট</option><option>হোসেনপুর</option><option>গাজীপুর</option></select></div>
 <div><label>উঠার স্থান</label><select id="inBoard"><option>গৌরীপুর</option><option>শম্ভুগঞ্জ</option><option>ময়মনসিংহ</option><option>উত্তরা</option><option>গাজীপুর</option><option>ঢাকা</option><option>সুরেশ্বর</option></select></div>
 </div>
+<button class="standBtn" id="standBtn" onclick="toggleStand()">🧍 দাঁড়ানো যাত্রীর টিকেট কাটো - ক্লিক করো</button>
+<div id="standBox" style="display:none;background:#fff3cd;border-radius:10px;padding:10px;margin-top:8px">
+<label>দাঁড়ানো কয়জন?</label><input id="standCount" type="number" value="1" min="1" max="20" oninput="updateTotal()">
+<label>দাঁড়ানো ভাড়া - তুমি বসাও</label><select id="standVara" onchange="updateTotal()"><option>৭০০ টাকা</option><option>৬০০ টাকা</option><option>৫০০ টাকা</option><option>৪০০ টাকা</option><option>৩০০ টাকা</option></select>
+</div>
 <div class="grid2">
 <div><label>সিট নং (অটো আসবে)</label><input id="inSeat" placeholder="সিটে ক্লিক করো" readonly></div>
-<div><label>ভাড়া (১ সিটের)</label><select id="inVara"><option>১০২০ টাকা</option><option>৮০০ টাকা</option><option>৬০০ টাকা</option><option>৫০০ টাকা</option></select></div>
+<div><label>ভাড়া (সিট অনুযায়ী অটো)</label><select id="inVara" onchange="updateTotal()"><option>১০২০ টাকা</option><option>৮০০ টাকা</option><option>৬০০ টাকা</option><option>৫০০ টাকা</option></select></div>
 </div>
-<div style="background:#e8f5e9;border-radius:10px;padding:9px;text-align:center;font-weight:900;margin-top:10px">মোট ভাড়া অটো: <span id="totalShow">০ টাকা</span></div>
-<div class="planBox">
+<div style="background:#e8f5e9;border-radius:10px;padding:9px;text-align:center;font-weight:900;margin-top:10px">মোট ভাড়া অটো: <span id="totalShow">০ টাকা</span> <span id="varaNote" style="font-size:11px;color:#555"></span></div>
+<div class="planBox" id="planBox">
 <div class="planHead">NURMAHAL SURESHWAR BUS KAFELA</div>
 <div class="planSub">SEAT PLAN | TOTAL 51 SEAT</div>
 <div class="countBar">
@@ -114,7 +126,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <div class="sBox" data-seat="N-1" onclick="toggleSeat('N-1')"><b>N-1</b><br><small>Name: ...</small></div>
 <div class="sBox" data-seat="N-2" onclick="toggleSeat('N-2')"><b>N-2</b><br><small>Name: ...</small></div>
 </div>
-<div style="text-align:center;font-size:11px;color:#888;font-weight:900;margin-bottom:4px">A1 A2 &nbsp;|&nbsp; GOLI &nbsp;|&nbsp; A3 A4</div>
+<div style="text-align:center;font-size:11px;color:#888;font-weight:900;margin-bottom:4px">A1 A2 &nbsp;|&nbsp; GOLI &nbsp;|&nbsp; A3 A4 | A-J,K = ১০২০ টাকা | M,N = ৮০০ টাকা</div>
 <div class="mainGrid" id="mainGrid"></div>
 <div class="lastTitle">LAST ROW</div>
 <div class="lastRow" id="lastRow"></div>
@@ -124,27 +136,71 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <button class="btn" onclick="make()">✅ এই টিকেটটা বানাও + রেকর্ডে জমা করো</button>
 </div>
 <button class="btnPrint hidePrint" onclick="window.print()">🖨️ এই টিকেট প্রিন্ট করো</button>
-<button class="btnDown hidePrint" onclick="downloadTicket()">📥 টিকেট ছবি ডাউনলোড করো - টিকেটের সাইজেই নামবে</button>
+<button class="btnDown hidePrint" onclick="downloadTicket()">📥 টিকেট ছবি ডাউনলোড করো</button>
 <div class="page" id="page"></div>
+<div id="printList"></div>
 <div class="recBox hidePrint">
-<h3>📋 রেকর্ড / জমা টিকেট</h3>
+<h3>📋 রেকর্ড / যাত্রীর লিস্ট / খোঁজা</h3>
+<label>🔍 নাম বা মোবা দিয়া খুঁজো</label><input id="searchBox" placeholder="নাম লিখো বা 019... লিখো" oninput="renderRecord()">
+<div class="grid2">
+<div><label>ঠিকানা দিয়া ফিল্টার - ক্লিক করলেই লিস্ট</label><select id="filterThikana" onchange="renderRecord()"><option value="">সব ঠিকানা</option><option>গৌরীপুর</option><option>ভাংনামারী</option><option>ঈশ্বরগঞ্জ</option><option>কুমরীকান্দা</option><option>মাঝিপাড়া</option><option>আললপুর</option><option>চায়নামোড়</option><option>তারাকান্দা</option><option>হালুয়াঘাট</option><option>হোসেনপুর</option><option>গাজীপুর</option></select></div>
+<div><label>গাড়ি দিয়া ফিল্টার</label><select id="filterGari" onchange="renderRecord()"><option value="">সব গাড়ি</option><option>১</option><option>২</option><option>৩</option><option>৪</option><option>৫</option><option>৬</option><option>৭</option><option>৮</option><option>৯</option><option>১০</option></select></div>
+</div>
+<button class="smallBtn" onclick="printList()">🖨️ এই লিস্টটা প্রিন্ট করো</button>
+<button class="smallBtn blue" onclick="clearFilter()">সব দেখো</button>
 <div class="recTotal"><div>মোট টিকেট<br><span id="recCount">০</span></div><div>মোট সিট<br><span id="recSeat">০</span></div><div>মোট টাকা<br><span id="recMoney">০</span></div></div>
 <div id="recList"><p style="text-align:center;color:#888">এখনো কোনো রেকর্ড নাই</p></div>
 <button class="clearAll" onclick="clearAllRecord()">🗑️ সব রেকর্ড মুছে দাও</button>
-<p style="text-align:center;font-size:11px;color:#888">রেকর্ড তোমার ফোনেই থাকবে। Delete চাপলে সিট আবার খালি হয়ে যাবে।</p>
 </div>
 <script>
 function toBn(n){return String(n).replace(/[0-9]/g,d=>"০১২৩৪৫৬৭৮৯"[d])}
 function toEn(s){return String(s).replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d))}
-let selected=[];
+function cleanPhone(s){return toEn(String(s||'')).replace(/[^0-9]/g,'')}
+let selected=[]; let standing=false;
 let records=JSON.parse(localStorage.getItem('nur_records')||'[]');
-let nextNo=parseInt(localStorage.getItem('nur_next_no')||'')|| (records.length? Math.max(...records.map(r=>parseInt(r.no)))+1 : 1);
-function showNextNo(){ document.getElementById('inNo').value=toBn(String(nextNo).padStart(3,'0')); }
-function updateTotal(){
-  let vara=parseInt(toEn(document.getElementById('inVara').value))||0;
-  document.getElementById('totalShow').textContent=toBn(vara*selected.length)+' টাকা';
+function getNextNo(){
+  let used=new Set(records.map(r=>parseInt(r.no)));
+  let i=1; while(used.has(i)) i++; return i;
 }
-document.getElementById('inVara').addEventListener('change',updateTotal);
+function showNextNo(){ document.getElementById('inNo').value=toBn(String(getNextNo()).padStart(3,'0')); }
+function fareForSeat(s){
+  if(s.startsWith('M-')||s.startsWith('N-')) return 800;
+  return 1020;
+}
+function autoByPhone(){
+  let ph=cleanPhone(document.getElementById('inPhone').value);
+  if(ph.length<6) return;
+  let found=[...records].reverse().find(r=>cleanPhone(r.phone)===ph);
+  if(found){
+    document.getElementById('inName').value=found.name;
+    document.getElementById('inThikana').value=found.thikana;
+    document.getElementById('inBoard').value=found.board;
+  }
+}
+function toggleStand(){
+  standing=!standing;
+  document.getElementById('standBtn').classList.toggle('on',standing);
+  document.getElementById('standBtn').textContent=standing?'✅ দাঁড়ানো মোড ON - আবার চাপলে সিট মোড':'🧍 দাঁড়ানো যাত্রীর টিকেট কাটো - ক্লিক করো';
+  document.getElementById('standBox').style.display=standing?'block':'none';
+  document.getElementById('planBox').style.display=standing?'none':'block';
+  if(standing){ selected=[]; }
+  updateUI();
+}
+function updateTotal(){
+  let total=0, note='';
+  if(standing){
+    let f=parseInt(toEn(document.getElementById('standVara').value))||0;
+    let c=parseInt(document.getElementById('standCount').value)||1;
+    total=f*c; note='(দাঁড়ানো '+toBn(c)+' জন x '+toBn(f)+')';
+  } else {
+    let vara=parseInt(toEn(document.getElementById('inVara').value))||0;
+    total=vara*selected.length;
+    if(selected.length) note='('+selected.join(', ')+' x '+toBn(vara)+')';
+  }
+  document.getElementById('totalShow').textContent=toBn(total)+' টাকা';
+  document.getElementById('varaNote').textContent=note;
+  return total;
+}
 let rows=['A','B','C','D','E','F','G','H','I','J'];
 let mg=document.getElementById('mainGrid');
 rows.forEach(r=>{
@@ -154,11 +210,14 @@ rows.forEach(r=>{
 });
 let lr=document.getElementById('lastRow');
 ['K1','K2','K3','K4','K5'].forEach(s=>{ lr.innerHTML+=`<div class="sBox" data-seat="${s}" onclick="toggleSeat('${s}')"><b>${s}</b><br><small>Name: ...</small></div>`; });
-function bookedSeats(){ let all=[]; records.forEach(r=>{ r.seats.forEach(s=>all.push(s)); }); return all; }
+function bookedSeats(){ let all=[]; records.forEach(r=>{ r.seats.forEach(s=>{ if(s!=='দাঁড়ানো') all.push(s); }); }); return all; }
 function toggleSeat(s){
-  if(bookedSeats().includes(s)){ alert(s+' সিটটা আগেই কাটা! রেকর্ড থেকে Delete করলে আবার খালি হবে।'); return; }
+  if(standing) return;
+  if(bookedSeats().includes(s)){ alert(s+' সিটটা আগেই কাটা!'); return; }
   let i=selected.indexOf(s);
   if(i>=0){ selected.splice(i,1); } else { selected.push(s); }
+  // ভাড়া অটো - শেষ ক্লিক করা সিট অনুযায়ী
+  document.getElementById('inVara').value=toBn(fareForSeat(s))+' টাকা';
   updateUI();
 }
 function clearSeats(){ selected=[]; updateUI(); }
@@ -171,73 +230,101 @@ function updateUI(){
     let sm=el.querySelector('small');
     if(sm){ let rec=records.find(r=>r.seats.includes(el.dataset.seat)); sm.textContent=rec? rec.name : 'Name: ...'; }
   });
-  document.getElementById('inSeat').value=selected.join(', ');
+  document.getElementById('inSeat').value=standing? 'দাঁড়ানো' : selected.join(', ');
   document.getElementById('cSel').textContent=toBn(selected.length);
   document.getElementById('cFree').textContent=toBn(51-booked.length-selected.length);
-  document.getElementById('selList').textContent=selected.length? 'সিলেক্ট: '+selected.join(', ') + '  |  মোট '+toBn(selected.length)+'টা সিট' : 'কোনো সিট সিলেক্ট হয় নাই - সিটে ক্লিক করো';
-  updateTotal(); renderRecord();
+  document.getElementById('selList').textContent=selected.length? 'সিলেক্ট: '+selected.join(', ') : 'কোনো সিট সিলেক্ট হয় নাই - সিটে ক্লিক করো';
+  updateTotal(); renderRecord(); showNextNo();
 }
-function saveRecords(){ localStorage.setItem('nur_records', JSON.stringify(records)); localStorage.setItem('nur_next_no', String(nextNo)); }
+function saveRecords(){ localStorage.setItem('nur_records', JSON.stringify(records)); }
 function ticketHTML(r){
   let qr=`NURMAHAL | NO.${r.no} | Gari No:${r.gari} | ${r.name} | ${r.phone} | ${r.date} | Seat:${r.seats.join(', ')} | Total ${r.total} Taka`;
-  return `<div class="ticket"><div class="head"><div class="bus">🚌</div><div><h3>নূরমহল সুরেশ্বর বাস কাফেলা</h3><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ</p></div></div><div class="gold"></div><div class="body"><div><div class="trow"><span>টিকিট নং: ${toBn(r.no)}</span></div><div class="gariRow">🚌 গাড়ি নং: ${r.gari}</div><div class="frow"><div>নাম: <b>${r.name}</b></div><div>ঠিকানা: <b>${r.thikana}</b></div></div><div class="frow"><div>মোবা: <b>${toBn(r.phone)}</b></div><div>যাত্রার তারিখ: <b>${toBn(r.date)}</b></div></div><div class="frow"><div>উঠার স্থান: <b>${r.board}</b></div><div>মোট ভাড়া: <b>${toBn(r.total)} টাকা</b></div></div><div class="seatRow"><div class="seatBox"><div class="lbl">সিট নং (${toBn(r.seats.length)}টা)</div><div class="val">${r.seats.join(', ')}</div></div><div class="qrBox"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qr)}"><p>টিকেট অনলাইন চেকিং হবে</p></div></div></div><div class="foot">🙏 আপনার যাত্রা শুভ হোক | তরিকুল ০১৯২৩-৫৩১৫১০</div></div></div>`;
+  let seatLabel=r.seats[0]==='দাঁড়ানো' ? 'দাঁড়ানো ('+toBn(r.standCount||1)+' জন)' : r.seats.join(', ');
+  let seatCount=r.seats[0]==='দাঁড়ানো' ? (r.standCount||1) : r.seats.length;
+  return `<div class="ticket"><div class="head"><div class="bus">🚌</div><div><h3>নূরমহল সুরেশ্বর বাস কাফেলা</h3><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ</p></div></div><div class="gold"></div><div class="body"><div><div class="trow"><span>টিকিট নং: ${toBn(r.no)}</span></div><div class="gariRow">🚌 গাড়ি নং: ${r.gari}</div><div class="frow"><div>নাম: <b>${r.name}</b></div><div>ঠিকানা: <b>${r.thikana}</b></div></div><div class="frow"><div>মোবা: <b>${toBn(r.phone)}</b></div><div>যাত্রার তারিখ: <b>${toBn(r.date)}</b></div></div><div class="frow"><div>উঠার স্থান: <b>${r.board}</b></div><div>মোট ভাড়া: <b>${toBn(r.total)} টাকা</b></div></div><div class="seatRow"><div class="seatBox"><div class="lbl">সিট নং (${toBn(seatCount)}টা)</div><div class="val">${seatLabel}</div></div><div class="qrBox"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qr)}"><p>টিকেট অনলাইন চেকিং হবে</p></div></div></div><div class="foot">🙏 আপনার যাত্রা শুভ হোক | তরিকুল ০১৯২৩-৫৩১৫১০</div></div></div>`;
+}
+function getFiltered(){
+  let q=(document.getElementById('searchBox').value||'').trim().toLowerCase();
+  let th=document.getElementById('filterThikana').value;
+  let g=document.getElementById('filterGari').value;
+  return records.filter(r=>{
+    if(th && r.thikana!==th) return false;
+    if(g && r.gari!==g) return false;
+    if(q){
+      let ph=cleanPhone(r.phone);
+      if(!(r.name.toLowerCase().includes(q) || ph.includes(cleanPhone(q)) || r.seats.join(',').toLowerCase().includes(q))) return false;
+    }
+    return true;
+  });
+}
+function clearFilter(){ document.getElementById('searchBox').value=''; document.getElementById('filterThikana').value=''; document.getElementById('filterGari').value=''; renderRecord(); }
+function printList(){
+  let list=getFiltered();
+  let html=`<h2 style="text-align:center">নূরমহল - যাত্রীর লিস্ট</h2><p style="text-align:center">মোট ${toBn(list.length)} টিকেট | মোট ${toBn(list.reduce((a,r)=>a+(r.seats[0]==='দাঁড়ানো'?(r.standCount||1):r.seats.length),0))} জন | মোট ${toBn(list.reduce((a,r)=>a+r.total,0))} টাকা</p><table><tr><th>টিকেট</th><th>নাম</th><th>মোবা</th><th>ঠিকানা</th><th>সিট</th><th>গাড়ি</th><th>ভাড়া</th></tr>`+list.map(r=>`<tr><td>${toBn(r.no)}</td><td>${r.name}</td><td>${toBn(r.phone)}</td><td>${r.thikana}</td><td>${r.seats[0]==='দাঁড়ানো'?'দাঁড়ানো ('+toBn(r.standCount||1)+' জন)':r.seats.join(', ')}</td><td>${r.gari}</td><td>${toBn(r.total)}</td></tr>`).join('')+`</table>`;
+  document.getElementById('printList').innerHTML=html;
+  document.getElementById('page').innerHTML='';
+  window.print();
 }
 function renderRecord(){
-  let list=document.getElementById('recList');
+  let list=getFiltered();
   let totSeat=0, totMoney=0;
-  records.forEach(r=>{ totSeat+=r.seats.length; totMoney+=r.total; });
-  document.getElementById('recCount').textContent=toBn(records.length);
+  list.forEach(r=>{ totSeat+=r.seats[0]==='দাঁড়ানো'?(r.standCount||1):r.seats.length; totMoney+=r.total; });
+  document.getElementById('recCount').textContent=toBn(list.length);
   document.getElementById('recSeat').textContent=toBn(totSeat);
   document.getElementById('recMoney').textContent=toBn(totMoney)+' টাকা';
-  if(!records.length){ list.innerHTML='<p style="text-align:center;color:#888">এখনো কোনো রেকর্ড নাই</p>'; return; }
-  list.innerHTML=records.map((r,i)=>`<div class="recItem"><button class="del" onclick="delRecord(${i})">❌ Delete / Cancel</button><b>টিকিট নং ${toBn(r.no)} | গাড়ি ${r.gari} | ${r.date}</b><br>নাম: ${r.name} | মোবা: ${toBn(r.phone)}<br>সিট: <b style="color:#d32f2f">${r.seats.join(', ')}</b> | ${r.board} - ${r.thikana}<br>মোট ভাড়া: ${toBn(r.total)} টাকা<br><button class="reprint" onclick="reprint(${i})">🖨️ আবার দেখো</button><button class="redown" onclick="reDownload(${i})">📥 ছবি ডাউনলোড</button></div>`).join('');
+  let el=document.getElementById('recList');
+  if(!list.length){ el.innerHTML='<p style="text-align:center;color:#888">এই খোঁজে কিছু পাওয়া যায় নাই</p>'; return; }
+  el.innerHTML=list.map(r=>{
+    let idx=records.indexOf(r);
+    let ph=cleanPhone(r.phone);
+    let waText=encodeURIComponent(`🚌 নূরমহল সুরেশ্বর বাস কাফেলা\nটিকিট নং: ${r.no}\nনাম: ${r.name}\nসিট: ${r.seats.join(', ')}\nগাড়ি: ${r.gari}\nতারিখ: ${r.date}\nমোট ভাড়া: ${r.total} টাকা\nযাত্রা শুভ হোক! - তরিকুল 01923-531510`);
+    return `<div class="recItem"><button class="del" onclick="delRecord(${idx})">❌ Delete</button><b>টিকিট নং ${toBn(r.no)} | গাড়ি ${r.gari} | ${r.date}</b><br>নাম: ${r.name} | মোবা: ${toBn(r.phone)}<br>ঠিকানা: <span style="cursor:pointer;color:#0d3a6b;text-decoration:underline" onclick="filterByThikana('${r.thikana}')">${r.thikana}</span> | ${r.board}<br>সিট: <b style="color:#d32f2f">${r.seats[0]==='দাঁড়ানো'?'দাঁড়ানো ('+toBn(r.standCount||1)+' জন)':r.seats.join(', ')}</b><br>মোট ভাড়া: ${toBn(r.total)} টাকা<br><button class="smallBtn" onclick="reprint(${idx})">🖨️ দেখো</button><button class="smallBtn blue" onclick="reDownload(${idx})">📥 ছবি</button><a href="https://wa.me/88${ph}?text=${waText}" target="_blank"><button class="smallBtn green">💚 WhatsApp পাঠাও</button></a></div>`;
+  }).join('');
 }
+function filterByThikana(t){ document.getElementById('filterThikana').value=t; renderRecord(); document.getElementById('recList').scrollIntoView({behavior:'smooth'}); }
 function delRecord(i){
-  if(!confirm('এই টিকেটটা Delete করবা? সিট আবার খালি হয়ে যাবে।')) return;
+  if(!confirm('এই টিকেটটা Delete করবা? সিট আবার খালি হবে, নং আবার ০০১ থেকে পূরণ হবে।')) return;
   records.splice(i,1); saveRecords(); updateUI();
 }
 function clearAllRecord(){
-  if(!confirm('সব রেকর্ড মুছে দিবা? টিকেট নং আবার ০০১ থেকে শুরু হবে।')) return;
-  records=[]; nextNo=1; saveRecords(); showNextNo(); updateUI();
+  if(!confirm('সব রেকর্ড মুছে দিবা?')) return;
+  records=[]; saveRecords(); updateUI();
 }
-function reprint(i){
-  document.getElementById('page').innerHTML=ticketHTML(records[i]);
-  document.getElementById('page').scrollIntoView({behavior:'smooth'});
-}
-function reDownload(i){
-  document.getElementById('page').innerHTML=ticketHTML(records[i]);
-  setTimeout(()=>downloadTicket(),400);
-}
+function reprint(i){ document.getElementById('page').innerHTML=ticketHTML(records[i]); document.getElementById('page').scrollIntoView({behavior:'smooth'}); }
+function reDownload(i){ document.getElementById('page').innerHTML=ticketHTML(records[i]); setTimeout(()=>downloadTicket(),400); }
 function downloadTicket(){
   let el=document.querySelector('#page .ticket');
   if(!el){ alert('আগে টিকেট বানাও ভাই!'); return; }
   html2canvas(el,{scale:3,backgroundColor:'#ffffff',useCORS:true}).then(canvas=>{
     let a=document.createElement('a');
-    let no=document.querySelector('#page .trow span')?.textContent||'ticket';
-    a.download='NurMahal-'+no.replace(/[^0-9]/g,'')+'.png';
-    a.href=canvas.toDataURL('image/png');
-    a.click();
+    a.download='NurMahal-Ticket.png';
+    a.href=canvas.toDataURL('image/png'); a.click();
   });
 }
 function make(){
+  if(standing){
+    let c=parseInt(document.getElementById('standCount').value)||1;
+    let f=parseInt(toEn(document.getElementById('standVara').value))||0;
+    let no=String(getNextNo()).padStart(3,'0');
+    let rec={no,gari:document.getElementById('inGari').value,name:document.getElementById('inName').value||'---',phone:document.getElementById('inPhone').value||'---',thikana:document.getElementById('inThikana').value,date:document.getElementById('inDate').value||'---',board:document.getElementById('inBoard').value,vara:document.getElementById('standVara').value,seats:['দাঁড়ানো'],standCount:c,total:f*c};
+    records.push(rec); saveRecords();
+    document.getElementById('page').innerHTML=ticketHTML(rec);
+    standing=false; document.getElementById('standBtn').classList.remove('on'); document.getElementById('standBtn').textContent='🧍 দাঁড়ানো যাত্রীর টিকেট কাটো - ক্লিক করো'; document.getElementById('standBox').style.display='none'; document.getElementById('planBox').style.display='block';
+    updateUI(); document.getElementById('page').scrollIntoView({behavior:'smooth'}); alert('দাঁড়ানো টিকেট '+toBn(no)+' হয়ে গেছে ভাই!');
+    return;
+  }
   if(selected.length===0){ alert('আগে ১টা সিট সিলেক্ট করো ভাই!'); return; }
-  let no=String(nextNo).padStart(3,'0');
-  let gari=document.getElementById('inGari').value||'১';
-  let nm=document.getElementById('inName').value||'---';
-  let ph=document.getElementById('inPhone').value||'---';
-  let th=document.getElementById('inThikana').value;
-  let dt=document.getElementById('inDate').value||'---';
-  let board=document.getElementById('inBoard').value;
+  let no=String(getNextNo()).padStart(3,'0');
   let vara=document.getElementById('inVara').value;
   let varaNum=parseInt(toEn(vara))||0;
-  let rec={no,gari,name:nm,phone:ph,thikana:th,date:dt,board,vara,seats:[...selected],total:varaNum*selected.length};
-  records.push(rec); nextNo++; saveRecords(); showNextNo();
+  let rec={no,gari:document.getElementById('inGari').value,name:document.getElementById('inName').value||'---',phone:document.getElementById('inPhone').value||'---',thikana:document.getElementById('inThikana').value,date:document.getElementById('inDate').value||'---',board:document.getElementById('inBoard').value,vara,seats:[...selected],total:varaNum*selected.length};
+  records.push(rec); saveRecords();
   document.getElementById('page').innerHTML=ticketHTML(rec);
   selected=[]; updateUI();
   document.getElementById('page').scrollIntoView({behavior:'smooth'});
-  alert('টিকেট '+toBn(no)+' রেকর্ডে জমা হয়ে গেছে ভাই! এখন ডাউনলোড করো।');
+  alert('টিকেট '+toBn(no)+' জমা হয়ে গেছে ভাই!');
 }
-showNextNo(); updateUI();
+updateUI();
 </script>
 </body>
   </html>
