@@ -46,9 +46,15 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .topRow div{text-align:center;font-weight:900;padding:10px 4px;border-radius:10px;font-size:13px}
 .pro,.bon{background:#8ecdf5} .cha{background:#000;color:#fff}
 .front{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
-.sBox{border:1.5px solid #333;border-radius:8px;background:#fff;padding:6px 4px;cursor:pointer;text-align:center;font-size:12px;line-height:1.3}
-.sBox b{font-size:13px} .sBox.sel{background:#d32f2f;color:#fff;border-color:#d32f2f} .sBox.booked{background:#555;color:#fff;border-color:#555;cursor:not-allowed} .sBox.blocked{background:#ff9800;color:#fff;border-color:#ff9800}
-.sBox small{font-size:10px;opacity:.8}
+.sBox{border:1.5px solid #333;border-radius:8px;background:#fff;padding:6px 4px;cursor:pointer;text-align:center;font-size:12px;line-height:1.3;min-height:48px}
+.sBox b{font-size:13px} .sBox.sel{background:#d32f2f;color:#fff;border-color:#d32f2f} .sBox.sel small{color:#fff}
+.sBox.booked{background:#0d5c3f!important;color:#fff!important;border-color:#0d5c3f!important;cursor:not-allowed}
+.sBox.booked small{color:#ffe58a!important;font-weight:900;opacity:1}
+.sBox.pendingSeat{background:#ff9800!important;color:#fff!important;border-color:#ff9800!important;cursor:not-allowed}
+.sBox.pendingSeat small{color:#fff!important;font-weight:900;opacity:1}
+.sBox.blocked{background:#333!important;color:#fff!important;border-color:#333!important}
+.sBox.blocked small{color:#ffcccc!important}
+.sBox small{font-size:10px;opacity:.8;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .mainGrid{display:grid;grid-template-columns:1fr 1fr 28px 1fr 1fr;gap:6px;align-items:stretch}
 .goli{display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-weight:900;color:#888;font-size:11px;letter-spacing:2px}
 .lastRow{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
@@ -78,6 +84,8 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .statGrid div{background:#fff;border-radius:9px;padding:8px 4px;text-align:center;font-weight:900;font-size:12px;line-height:1.5}
 .backupBox{background:#e3f2fd;border:2px solid #0d3a6b;border-radius:12px;padding:10px;margin-top:12px;text-align:center}
 .editBar{background:#ffebee;border:2px solid #d32f2f;border-radius:10px;padding:10px;margin-top:10px;text-align:center;font-weight:900;display:none}
+.legend{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0;font-size:11px;font-weight:900}
+.legend span{padding:4px 8px;border-radius:20px}
 @media print{
   body{background:#fff;padding:0} .form,.btnPrint,.btnDown,.hidePrint,.recBox{display:none!important}
   .page{max-width:100%;width:100%;padding:0;margin:0}
@@ -128,6 +136,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <div class="planBox" id="planBox">
 <div class="planHead">NURMAHAL SURESHWAR BUS KAFELA</div>
 <div class="planSub">SEAT PLAN | TOTAL 51 SEAT</div>
+<div class="legend"><span style="background:#fff;border:1.5px solid #333">⬜ খালি</span><span style="background:#d32f2f;color:#fff">🟥 সিলেক্ট</span><span style="background:#0d5c3f;color:#fff">🟩 বুকড + নাম</span><span style="background:#ff9800;color:#fff">🟧 পেন্ডিং + নাম</span><span style="background:#333;color:#fff">⬛ ব্লক</span></div>
 <div class="countBar">
 <div class="cTotal">মোট<br><span id="cTotal">৫১</span></div>
 <div class="cSel">সিলেক্ট<br><span id="cSel">০</span></div>
@@ -234,7 +243,8 @@ rows.forEach(r=>{
 let lr=document.getElementById('lastRow');
 ['K1','K2','K3','K4','K5'].forEach(s=>{ lr.innerHTML+=`<div class="sBox" data-seat="${s}" onclick="toggleSeat('${s}')"><b>${s}</b><br><small>Name: ...</small></div>`; });
 function blockedSeats(){ return blocked.filter(b=>b.gari===document.getElementById('inGari').value && b.date===document.getElementById('inDate').value).map(b=>b.seat); }
-function bookedSeats(){ let all=[]; records.forEach(r=>{ if(r.gari===document.getElementById('inGari').value && r.date===document.getElementById('inDate').value){ r.seats.forEach(s=>{ if(s!=='দাঁড়ানো') all.push(s); }); } }); return all; }
+function bookedSeats(){ let all=[]; records.forEach(r=>{ if(r.gari===document.getElementById('inGari').value && r.date===document.getElementById('inDate').value && (r.status||'confirmed')!=='pending'){ r.seats.forEach(s=>{ if(s!=='দাঁড়ানো') all.push(s); }); } }); return all; }
+function pendingSeats(){ let all=[]; records.forEach(r=>{ if(r.gari===document.getElementById('inGari').value && r.date===document.getElementById('inDate').value && r.status==='pending'){ r.seats.forEach(s=>{ if(s!=='দাঁড়ানো') all.push(s); }); } }); return all; }
 function toggleSeat(s){
   if(standing) return;
   if(blockMode){
@@ -243,7 +253,8 @@ function toggleSeat(s){
     saveBlocked(); updateUI(); return;
   }
   if(blockedSeats().includes(s)){ alert('এই সিটটা ব্লক করা - নষ্ট সিট!'); return; }
-  if(bookedSeats().includes(s)){ alert(s+' সিটটা আগেই কাটা! এই গাড়ি / তারিখে'); return; }
+  if(bookedSeats().includes(s)){ let rec=records.find(r=>r.gari===document.getElementById('inGari').value && r.date===document.getElementById('inDate').value && r.seats.includes(s)); alert(s+' সিটটা বুকড! কাটছে: '+(rec?rec.name:'')); return; }
+  if(pendingSeats().includes(s)){ let rec=records.find(r=>r.gari===document.getElementById('inGari').value && r.date===document.getElementById('inDate').value && r.seats.includes(s)); alert(s+' সিটটা পেন্ডিং! কাটছে: '+(rec?rec.name:'')); return; }
   let i=selected.indexOf(s);
   if(i>=0){ selected.splice(i,1); } else { selected.push(s); }
   document.getElementById('inVara').value=toBn(fareForSeat(s))+' টাকা';
@@ -251,19 +262,20 @@ function toggleSeat(s){
 }
 function clearSeats(){ selected=[]; updateUI(); }
 function updateUI(){
-  let booked=bookedSeats(); let blk=blockedSeats();
+  let booked=bookedSeats(); let pend=pendingSeats(); let blk=blockedSeats();
   let curGari=document.getElementById('inGari').value; let curDate=document.getElementById('inDate').value;
   document.querySelectorAll('.sBox').forEach(el=>{
-    el.classList.remove('sel','booked','blocked');
+    el.classList.remove('sel','booked','pendingSeat','blocked');
     if(selected.includes(el.dataset.seat)) el.classList.add('sel');
     if(booked.includes(el.dataset.seat)) el.classList.add('booked');
+    if(pend.includes(el.dataset.seat)) el.classList.add('pendingSeat');
     if(blk.includes(el.dataset.seat)) el.classList.add('blocked');
     let sm=el.querySelector('small');
     if(sm){ let rec=records.find(r=>r.gari===curGari && r.date===curDate && r.seats.includes(el.dataset.seat)); sm.textContent=rec? rec.name : 'Name: ...'; }
   });
   document.getElementById('inSeat').value=standing? 'দাঁড়ানো' : selected.join(', ');
   document.getElementById('cSel').textContent=toBn(selected.length);
-  document.getElementById('cFree').textContent=toBn(51-booked.length-blk.length-selected.length);
+  document.getElementById('cFree').textContent=toBn(51-booked.length-pend.length-blk.length-selected.length);
   document.getElementById('selList').textContent=selected.length? 'সিলেক্ট: '+selected.join(', ') : 'কোনো সিট সিলেক্ট হয় নাই - সিটে ক্লিক করো';
   updateTotal(); renderRecord(); showNextNo();
 }
@@ -414,4 +426,4 @@ document.getElementById('inDate').value=todayLocal();
 updateUI();
 </script>
 </body>
-                                    </html>
+                                                                                                                                                                                    </html>
