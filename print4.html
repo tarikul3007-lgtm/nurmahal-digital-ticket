@@ -163,7 +163,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <button class="btn" id="mainBtn" onclick="make()">✅ এই টিকেটটা বানাও + রেকর্ডে জমা করো</button>
 </div>
 <button class="btnPrint hidePrint" onclick="window.print()">🖨️ এই টিকেট প্রিন্ট করো</button>
-<button class="btnDown hidePrint" onclick="downloadTicket()">📥 টিকেট ছবি ডাউনলোড করো</button>
+<button class="btnDown hidePrint" onclick="downloadTicket()">📥 HD টিকেট ছবি ডাউনলোড করো</button>
 <div class="page" id="page"></div>
 <div id="printList"></div>
 <div class="recBox hidePrint">
@@ -273,7 +273,7 @@ function ticketHTML(r){
   let qr=`NURMAHAL | NO.${r.no} | Gari No:${r.gari} | ${r.name} | ${r.phone} | ${r.date} | Seat:${r.seats.join(', ')} | Total ${r.total} Taka | ${r.payMethod||''} Trx:${r.trxId||''} | Status:${r.status||'confirmed'}`;
   let seatLabel=r.seats[0]==='দাঁড়ানো' ? 'দাঁড়ানো ('+toBn(r.standCount||1)+' জন)' : r.seats.join(', ');
   let seatCount=r.seats[0]==='দাঁড়ানো' ? (r.standCount||1) : r.seats.length;
-  return `<div class="ticket"><div class="head"><div class="bus">🚌</div><div><h3>নূরমহল সুরেশ্বর বাস কাফেলা</h3><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ</p></div></div><div class="gold"></div><div class="body"><div><div class="trow"><span>টিকিট নং: ${toBn(r.no)}</span><span style="font-size:11px;background:${isPending?'#ff9800':'#e8f5e9'};color:${isPending?'#fff':'#0d5c3f'};padding:3px 8px;border-radius:10px">${isPending?'⏳ পেন্ডিং':'✅ পেমেন্ট কনফার্ম'}</span></div><div class="gariRow">🚌 গাড়ি নং: ${r.gari}</div><div class="frow"><div>নাম: <b>${r.name}</b></div><div>ঠিকানা: <b>${r.thikana}</b></div></div><div class="frow"><div>মোবা: <b>${toBn(r.phone)}</b></div><div>যাত্রার তারিখ: <b>${toBn(r.date)}</b></div></div><div class="frow"><div>উঠার স্থান: <b>${r.board}</b></div><div>মোট ভাড়া: <b>${toBn(r.total)} টাকা</b></div></div><div class="frow"><div>পেমেন্ট: <b>${r.payMethod||'Cash - হাতে নগদ'}</b></div><div>TrxID: <b>${r.trxId||'ক্যাশ'}</b></div></div><div class="seatRow"><div class="seatBox"><div class="lbl">সিট নং (${toBn(seatCount)}টা)</div><div class="val">${seatLabel}</div></div><div class="qrBox"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qr)}"><p>টিকেট অনলাইন চেকিং হবে</p></div></div>${isPending?'<div class="pendingBar">⏳ পেমেন্ট যাচাই চলছে - অ্যাডমিন কনফার্ম করলে কনফার্ম হবে</div>':''}</div><div class="foot">🙏 আপনার যাত্রা শুভ হোক | তরিকুল ০১৯২৩-৫৩১৫১০</div></div></div>`;
+  return `<div class="ticket"><div class="head"><div class="bus">🚌</div><div><h3>নূরমহল সুরেশ্বর বাস কাফেলা</h3><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ</p></div></div><div class="gold"></div><div class="body"><div><div class="trow"><span>টিকিট নং: ${toBn(r.no)}</span><span style="font-size:11px;background:${isPending?'#ff9800':'#e8f5e9'};color:${isPending?'#fff':'#0d5c3f'};padding:3px 8px;border-radius:10px">${isPending?'⏳ পেন্ডিং':'✅ পেমেন্ট কনফার্ম'}</span></div><div class="gariRow">🚌 গাড়ি নং: ${r.gari}</div><div class="frow"><div>নাম: <b>${r.name}</b></div><div>ঠিকানা: <b>${r.thikana}</b></div></div><div class="frow"><div>মোবা: <b>${toBn(r.phone)}</b></div><div>যাত্রার তারিখ: <b>${toBn(r.date)}</b></div></div><div class="frow"><div>উঠার স্থান: <b>${r.board}</b></div><div>মোট ভাড়া: <b>${toBn(r.total)} টাকা</b></div></div><div class="frow"><div>পেমেন্ট: <b>${r.payMethod||'Cash - হাতে নগদ'}</b></div><div>TrxID: <b>${r.trxId||'ক্যাশ'}</b></div></div><div class="seatRow"><div class="seatBox"><div class="lbl">সিট নং (${toBn(seatCount)}টা)</div><div class="val">${seatLabel}</div></div><div class="qrBox"><img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qr)}"><p>টিকেট অনলাইন চেকিং হবে</p></div></div>${isPending?'<div class="pendingBar">⏳ পেমেন্ট যাচাই চলছে - অ্যাডমিন কনফার্ম করলে কনফার্ম হবে</div>':''}</div><div class="foot">🙏 আপনার যাত্রা শুভ হোক | তরিকুল ০১৯২৩-৫৩১৫১০</div></div></div>`;
 }
 function getFiltered(){
   let q=(document.getElementById('searchBox').value||'').trim().toLowerCase();
@@ -349,15 +349,18 @@ function clearAllRecord(){
   records=[]; saveRecords(); updateUI();
 }
 function reprint(i){ document.getElementById('page').innerHTML=ticketHTML(records[i]); document.getElementById('page').scrollIntoView({behavior:'smooth'}); }
-function reDownload(i){ document.getElementById('page').innerHTML=ticketHTML(records[i]); setTimeout(()=>downloadTicket(),400); }
+function reDownload(i){ document.getElementById('page').innerHTML=ticketHTML(records[i]); setTimeout(()=>downloadTicket(),800); }
 function downloadTicket(){
   let el=document.querySelector('#page .ticket');
   if(!el){ alert('আগে টিকেট বানাও ভাই!'); return; }
-  html2canvas(el,{scale:3,backgroundColor:'#ffffff',useCORS:true}).then(canvas=>{
-    let a=document.createElement('a');
-    a.download='NurMahal-Ticket.png';
-    a.href=canvas.toDataURL('image/png'); a.click();
-  });
+  setTimeout(()=>{
+    html2canvas(el,{scale:6,backgroundColor:'#ffffff',useCORS:true,logging:false,imageTimeout:5000,windowWidth:document.documentElement.clientWidth,windowHeight:document.documentElement.clientHeight}).then(canvas=>{
+      let a=document.createElement('a');
+      a.download='NurMahal-Ticket-HD.png';
+      a.href=canvas.toDataURL('image/png',1.0); a.click();
+      alert('✅ HD টিকেট ডাউনলোড হয়ে গেছে ভাই! এখন প্রিন্ট করলেও ঘোলা হবে না।');
+    });
+  },500);
 }
 function exportBackup(){
   let blob=new Blob([JSON.stringify({records,blocked})],{type:'application/json'});
@@ -411,4 +414,4 @@ document.getElementById('inDate').value=todayLocal();
 updateUI();
 </script>
 </body>
-  </html>
+                                    </html>
