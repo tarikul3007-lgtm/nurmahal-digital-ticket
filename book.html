@@ -57,13 +57,14 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .clearBtn{width:100%;padding:9px;background:#fff;border:1.5px solid #d32f2f;color:#d32f2f;border-radius:9px;font-weight:900;margin-top:8px;cursor:pointer}
 .standBtn{width:100%;padding:11px;background:#fff;border:2px dashed #0d3a6b;color:#0d3a6b;border-radius:10px;font-weight:900;margin-top:10px;cursor:pointer}
 .standBtn.on{background:#0d3a6b;color:#fff}
+.pendingBar{background:#ff9800;color:#fff;text-align:center;font-weight:900;padding:9px;border-radius:8px;margin-top:9px}
 @media print{ body{background:#fff;padding:0} .form,.btnDown{display:none!important} .page{max-width:90mm;width:90mm;margin:0 auto} @page{size:90mm auto;margin:0} }
 </style>
 </head>
 <body>
 <div class="form">
 <h2>🚌 নূরমহল - অনলাইন টিকেট</h2>
-<p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ<br>অনলাইনে শুধু বিকাশ / নগদে পেমেন্ট করে বুকিং হবে</p>
+<p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ<br>আগে পেমেন্ট, তারপর অ্যাডমিন কনফার্ম করলে টিকেট কনফার্ম হবে</p>
 <div class="grid2">
 <div><label>যাত্রার তারিখ</label><input id="inDate" type="date"></div>
 <div><label>🚌 গাড়ি নং</label><select id="inGari"><option>১</option><option>২</option><option>৩</option><option>৪</option><option>৫</option><option>৬</option><option>৭</option><option>৮</option><option>৯</option><option>১০</option></select></div>
@@ -88,7 +89,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <div style="background:#e8f5e9;border-radius:10px;padding:9px;text-align:center;font-weight:900;margin-top:10px">মোট দিতে হবে: <span id="totalShow">০ টাকা</span> <span style="font-size:11px;color:#d32f2f">(খরচ সহ পাঠাবেন)</span></div>
 <div class="planBox" id="planBox">
 <div class="planHead">SEAT PLAN | TOTAL 51 SEAT</div>
-<div class="planSub">লাল = সিলেক্ট | কালো = বুকড / ব্লক</div>
+<div class="planSub">লাল = সিলেক্ট | কালো = বুকড / পেন্ডিং / ব্লক</div>
 <div class="countBar"><div class="cTotal">মোট<br>৫১</div><div class="cSel">সিলেক্ট<br><span id="cSel">০</span></div><div class="cFree">খালি<br><span id="cFree">৫১</span></div></div>
 <div class="selList" id="selList">সিটে ক্লিক করো</div>
 <div class="topRow"><div class="pro">PROBESH</div><div class="bon">BONNET</div><div class="cha">◎ CHALOK</div></div>
@@ -99,20 +100,19 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <button class="clearBtn" onclick="clearSeats()">❌ সব সিট বাদ দাও</button>
 </div>
 <div class="payBox">
-<div><b>⚠️ আগে টাকা পাঠান, তারপর বুকিং হবে</b></div>
+<div><b>⚠️ আগে টাকা পাঠান, তারপর বুকিং রিকোয়েস্ট যাবে</b></div>
 <div class="num">বিকাশ / নগদ: ০১৯২৩-৫৩১৫১০</div>
 <div><b>সেন্ড মানি - খরচ সহ (BDT)</b> করে TrxID নিচে দিবেন</div>
-<div style="font-size:12px;margin-top:5px">হাতে ক্যাশ দিলে অনলাইনে বুকিং হবে না। ক্যাশ দিলে সরাসরি আমাদের সাথে যোগাযোগ করুন: 01923-531510</div>
+<div style="font-size:12px;margin-top:5px">TrxID দিলেই সাথে সাথে কনফার্ম হবে না। অ্যাডমিন টাকা চেক করে কনফার্ম করবে।</div>
 </div>
 <div class="grid2">
 <div><label>বিকাশ / নগদ সিলেক্ট করো</label><select id="payMethod"><option>বিকাশ</option><option>নগদ</option></select></div>
 <div><label>যেই নাম্বার থেকে টাকা পাঠাইছেন</label><input id="senderNo" placeholder="০১XXXXXXXXX"></div>
 </div>
 <div><label>TrxID - সেন্ড মানির মেসেজে আছে (না দিলে বুকিং হবে না)</label><input id="trxId" placeholder="যেমন: 9AB1234CDE"></div>
-<button class="btn" onclick="make()">✅ পেমেন্ট করছি - টিকেট কনফার্ম করো</button>
-<p style="font-size:11px;color:#888">TrxID ভুল দিলে টিকেট বাতিল হবে। অ্যাডমিন বিকাশে চেক করে কনফার্ম করবে।</p>
+<button class="btn" onclick="make()">✅ পেমেন্ট করছি - বুকিং রিকোয়েস্ট পাঠাও</button>
 </div>
-<button class="btnDown" onclick="downloadTicket()">📥 টিকেট ছবি ডাউনলোড করো</button>
+<button class="btnDown" onclick="downloadTicket()">📥 পেন্ডিং টিকেট ছবি ডাউনলোড করো</button>
 <div class="page" id="page"></div>
 <script>
 function toBn(n){return String(n).replace(/[0-9]/g,d=>"০১২৩৪৫৬৭৮৯"[d])}
@@ -150,7 +150,7 @@ let lr=document.getElementById('lastRow');
 function bookedSeats(){ let all=[]; records.forEach(r=>{ if(r.gari===document.getElementById('inGari').value && r.date===document.getElementById('inDate').value){ r.seats.forEach(s=>{ if(s!=='দাঁড়ানো') all.push(s); }); } }); return all; }
 function toggleSeat(s){
   if(standing) return;
-  if(bookedSeats().includes(s)){ alert('এই সিটটা বুকড হয়ে গেছে!'); return; }
+  if(bookedSeats().includes(s)){ alert('এই সিটটা বুকড / পেন্ডিং হয়ে গেছে!'); return; }
   let i=selected.indexOf(s);
   if(i>=0) selected.splice(i,1); else selected.push(s);
   document.getElementById('inVara').value=toBn(fareForSeat(s))+' টাকা';
@@ -173,15 +173,16 @@ function updateUI(){
 document.getElementById('inGari').addEventListener('change',updateUI);
 document.getElementById('inDate').addEventListener('change',updateUI);
 function ticketHTML(r){
-  let qr=`NURMAHAL | NO.${r.no} | Gari:${r.gari} | ${r.name} | ${r.phone} | ${r.date} | Seat:${r.seats.join(', ')} | Total ${r.total} BDT | ${r.payMethod} Trx:${r.trxId}`;
+  let isPending=r.status==='pending';
+  let qr=`NURMAHAL | NO.${r.no} | Gari:${r.gari} | ${r.name} | ${r.phone} | ${r.date} | Seat:${r.seats.join(', ')} | Total ${r.total} BDT | ${r.payMethod} Trx:${r.trxId} | Status:${r.status||'pending'}`;
   let seatLabel=r.seats[0]==='দাঁড়ানো' ? 'দাঁড়ানো ('+toBn(r.standCount||1)+' জন)' : r.seats.join(', ');
   let seatCount=r.seats[0]==='দাঁড়ানো' ? (r.standCount||1) : r.seats.length;
-  return `<div class="ticket"><div class="head"><div class="bus">🚌</div><div><h3>নূরমহল সুরেশ্বর বাস কাফেলা</h3><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ</p></div></div><div class="gold"></div><div class="body"><div><div class="trow"><span>টিকিট নং: ${toBn(r.no)}</span><span style="font-size:11px;background:#e8f5e9;padding:3px 8px;border-radius:10px">✅ পেমেন্ট কনফার্ম</span></div><div class="gariRow">🚌 গাড়ি নং: ${r.gari}</div><div class="frow"><div>নাম: <b>${r.name}</b></div><div>ঠিকানা: <b>${r.thikana}</b></div></div><div class="frow"><div>মোবা: <b>${toBn(r.phone)}</b></div><div>যাত্রার তারিখ: <b>${toBn(r.date)}</b></div></div><div class="frow"><div>উঠার স্থান: <b>${r.board}</b></div><div>মোট ভাড়া: <b>${toBn(r.total)} টাকা</b></div></div><div class="frow"><div>পেমেন্ট: <b>${r.payMethod} - খরচ সহ (BDT)</b></div><div>TrxID: <b>${r.trxId}</b></div></div><div class="seatRow"><div class="seatBox"><div class="lbl">সিট নং (${toBn(seatCount)}টা)</div><div class="val">${seatLabel}</div></div><div class="qrBox"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qr)}"><p>টিকেট অনলাইন চেকিং হবে</p></div></div></div><div class="foot">🙏 আপনার যাত্রা শুভ হোক | তরিকুল ০১৯২৩-৫৩১৫১০</div></div></div>`;
+  return `<div class="ticket"><div class="head"><div class="bus">🚌</div><div><h3>নূরমহল সুরেশ্বর বাস কাফেলা</h3><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ</p></div></div><div class="gold"></div><div class="body"><div><div class="trow"><span>টিকিট নং: ${toBn(r.no)}</span><span style="font-size:11px;background:${isPending?'#ff9800':'#e8f5e9'};color:${isPending?'#fff':'#0d5c3f'};padding:3px 8px;border-radius:10px">${isPending?'⏳ পেন্ডিং - যাচাই চলছে':'✅ পেমেন্ট কনফার্ম'}</span></div><div class="gariRow">🚌 গাড়ি নং: ${r.gari}</div><div class="frow"><div>নাম: <b>${r.name}</b></div><div>ঠিকানা: <b>${r.thikana}</b></div></div><div class="frow"><div>মোবা: <b>${toBn(r.phone)}</b></div><div>যাত্রার তারিখ: <b>${toBn(r.date)}</b></div></div><div class="frow"><div>উঠার স্থান: <b>${r.board}</b></div><div>মোট ভাড়া: <b>${toBn(r.total)} টাকা</b></div></div><div class="frow"><div>পেমেন্ট: <b>${r.payMethod} - খরচ সহ (BDT)</b></div><div>TrxID: <b>${r.trxId}</b></div></div><div class="seatRow"><div class="seatBox"><div class="lbl">সিট নং (${toBn(seatCount)}টা)</div><div class="val">${seatLabel}</div></div><div class="qrBox"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qr)}"><p>টিকেট অনলাইন চেকিং হবে</p></div></div>${isPending?'<div class="pendingBar">⏳ পেমেন্ট যাচাই চলছে - অ্যাডমিন কনফার্ম করলে টিকেট কনফার্ম হবে</div>':''}</div><div class="foot">🙏 আপনার যাত্রা শুভ হোক | তরিকুল ০১৯২৩-৫৩১৫১০</div></div></div>`;
 }
 function downloadTicket(){
   let el=document.querySelector('#page .ticket');
   if(!el){ alert('আগে টিকেট বানাও!'); return; }
-  html2canvas(el,{scale:3,backgroundColor:'#ffffff',useCORS:true}).then(canvas=>{ let a=document.createElement('a'); a.download='NurMahal-Ticket.png'; a.href=canvas.toDataURL('image/png'); a.click(); });
+  html2canvas(el,{scale:3,backgroundColor:'#ffffff',useCORS:true}).then(canvas=>{ let a=document.createElement('a'); a.download='NurMahal-Pending-Ticket.png'; a.href=canvas.toDataURL('image/png'); a.click(); });
 }
 function make(){
   let nm=document.getElementById('inName').value.trim();
@@ -195,24 +196,24 @@ function make(){
   if(standing==false && selected.length===0){ alert('আগে সিট সিলেক্ট করো!'); return; }
   if(!trx){ alert('আগে বিকাশ / নগদ 01923-531510 তে খরচ সহ সেন্ড মানি করো, তারপর TrxID দাও! TrxID ছাড়া বুকিং হবে না।'); return; }
   if(cleanPhone(sender).length<11){ alert('যেই নাম্বার থেকে টাকা পাঠাইছো, ওই নাম্বারটা দাও!'); return; }
-  if(records.some(r=>r.trxId && r.trxId.toLowerCase()===trx.toLowerCase())){ alert('এই TrxID দিয়ে আগেই একটা টিকেট কাটা হইছে!'); return; }
+  if(records.some(r=>r.trxId && r.trxId.toLowerCase()===trx.toLowerCase())){ alert('এই TrxID দিয়ে আগেই একটা রিকোয়েস্ট আসছে!'); return; }
   let no=String(getNextNo()).padStart(3,'0');
   let total=updateTotal();
   let rec;
   if(standing){
     let c=parseInt(document.getElementById('standCount').value)||1;
     let f=parseInt(toEn(document.getElementById('standVara').value))||0;
-    rec={no,gari:document.getElementById('inGari').value,name:nm,phone:ph,thikana:document.getElementById('inThikana').value,date:dt,board:document.getElementById('inBoard').value,vara:document.getElementById('standVara').value,seats:['দাঁড়ানো'],standCount:c,total:f*c,payMethod:document.getElementById('payMethod').value,trxId:trx,senderNo:sender,source:'online'};
+    rec={no,gari:document.getElementById('inGari').value,name:nm,phone:ph,thikana:document.getElementById('inThikana').value,date:dt,board:document.getElementById('inBoard').value,vara:document.getElementById('standVara').value,seats:['দাঁড়ানো'],standCount:c,total:f*c,payMethod:document.getElementById('payMethod').value,trxId:trx,senderNo:sender,source:'online',status:'pending'};
   } else {
     let vara=document.getElementById('inVara').value;
     let varaNum=parseInt(toEn(vara))||0;
-    rec={no,gari:document.getElementById('inGari').value,name:nm,phone:ph,thikana:document.getElementById('inThikana').value,date:dt,board:document.getElementById('inBoard').value,vara,seats:[...selected],total:varaNum*selected.length,payMethod:document.getElementById('payMethod').value,trxId:trx,senderNo:sender,source:'online'};
+    rec={no,gari:document.getElementById('inGari').value,name:nm,phone:ph,thikana:document.getElementById('inThikana').value,date:dt,board:document.getElementById('inBoard').value,vara,seats:[...selected],total:varaNum*selected.length,payMethod:document.getElementById('payMethod').value,trxId:trx,senderNo:sender,source:'online',status:'pending'};
   }
   records.push(rec); localStorage.setItem('nur_records',JSON.stringify(records));
   document.getElementById('page').innerHTML=ticketHTML(rec);
   selected=[]; updateUI();
   document.getElementById('page').scrollIntoView({behavior:'smooth'});
-  alert('✅ বুকিং কনফার্ম! টিকেট নং '+toBn(no)+' | '+rec.payMethod+' TrxID: '+trx+' | টিকেট ডাউনলোড করে রাখো।');
+  alert('⏳ রিকোয়েস্ট গেছে! টিকেট নং '+toBn(no)+' | TrxID: '+trx+' | অ্যাডমিন টাকা চেক করে কনফার্ম করবে। এখনো কনফার্ম হয় নাই।');
 }
 updateUI();
 </script>
