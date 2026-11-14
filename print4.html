@@ -35,6 +35,19 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .qrBox img{width:78px;height:78px;border:2px solid #0d3a6b;border-radius:8px}
 .qrBox p{margin:3px 0 0;font-size:10px;font-weight:bold;color:#0d5c3f;white-space:nowrap}
 .foot{background:#e8f5e9!important;color:#0d5c3f;text-align:center;font-size:12.5px;font-weight:bold;padding:7px;border-top:1.5px solid #e8a91c;line-height:1.5;white-space:nowrap;overflow:hidden;margin-top:10px}
+/* টিকেটের ভিতরের সিট প্ল্যান */
+.ticketPlan{margin-top:12px;border:2px solid #0d3a6b;border-radius:12px;padding:8px;background:#fff8d6}
+.ticketPlan .tpHead{text-align:center;font-weight:900;color:#0d3a6b;font-size:14px}
+.ticketPlan .tpSub{text-align:center;font-weight:900;font-size:12px;color:#d32f2f;margin:2px 0 7px}
+.tpTop{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px}
+.tpTop div{text-align:center;font-weight:900;padding:6px 2px;border-radius:8px;font-size:11px}
+.tpFront{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:6px}
+.tpGrid{display:grid;grid-template-columns:1fr 1fr 18px 1fr 1fr;gap:4px}
+.tpGrid .goli2{display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-weight:900;color:#888;font-size:9px}
+.tpCell{border:1.2px solid #333;border-radius:6px;background:#fff;padding:4px 2px;text-align:center;font-size:10px;font-weight:900;line-height:1.2}
+.tpCell.mine{background:#d32f2f!important;color:#fff!important;border-color:#d32f2f}
+.tpLast{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:6px}
+.tpLegend{text-align:center;font-size:10px;font-weight:900;margin-top:6px;color:#333}
 .planBox{margin-top:12px;border:2px solid #0d3a6b;border-radius:14px;padding:10px;background:#fff8d6}
 .planHead{text-align:center;font-weight:900;color:#0d3a6b;font-size:15px}
 .planSub{text-align:center;font-weight:900;font-size:13px;margin:2px 0 8px}
@@ -114,7 +127,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <div><label>টিকেট নং (অটো)</label><input id="inNo" type="text" value="০০১" readonly style="background:#eef2f7;font-weight:900"></div>
 <div><label>যাত্রার তারিখ</label><input id="inDate" type="date"></div>
 </div>
-<div><label>🚌 গাড়ি নং</label><select id="inGari"><option>১</option><option>২</option><option>৩</option><option>৪</option><option>৫</option><option>৬</option><option>৭</option><option>৮</option><option>৯</option><option>১০</option></select></div>
+<div><label>🚌 গাড়ি নং</label><select id="inGari" onchange="updateUI()"><option>১</option><option>২</option><option>৩</option><option>৪</option><option>৫</option><option>৬</option><option>৭</option><option>৮</option><option>৯</option><option>১০</option></select></div>
 <div class="grid2">
 <div><label>নাম</label><input id="inName" placeholder="যাত্রীর নাম"></div>
 <div><label>মোবা - লিখলেই নাম অটো আসবে</label><input id="inPhone" placeholder="০১XXXXXXXXX" oninput="autoByPhone()"></div>
@@ -135,7 +148,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <div style="background:#e8f5e9;border-radius:10px;padding:9px;text-align:center;font-weight:900;margin-top:10px">মোট ভাড়া অটো: <span id="totalShow">০ টাকা</span> <span id="varaNote" style="font-size:11px;color:#555"></span></div>
 <div class="planBox" id="planBox">
 <div class="planHead">NURMAHAL SURESHWAR BUS KAFELA</div>
-<div class="planSub">SEAT PLAN | TOTAL 51 SEAT</div>
+<div class="planSub" id="planSub">SEAT PLAN | বাস নং ০১ | স্থানঃ গৌরীপুর | TOTAL 51 SEAT</div>
 <div class="legend"><span style="background:#fff;border:1.5px solid #333">⬜ খালি</span><span style="background:#d32f2f;color:#fff">🟥 সিলেক্ট</span><span style="background:#0d5c3f;color:#fff">🟩 বুকড + নাম</span><span style="background:#ff9800;color:#fff">🟧 পেন্ডিং + নাম</span><span style="background:#333;color:#fff">⬛ ব্লক</span></div>
 <div class="countBar">
 <div class="cTotal">মোট<br><span id="cTotal">৫১</span></div>
@@ -161,7 +174,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <div class="lastRow" id="lastRow"></div>
 <button class="clearBtn" onclick="clearSeats()">❌ সব সিট বাদ দাও</button>
 <button class="modeBtn" id="blockBtn" onclick="toggleBlockMode()">🚧 সিট ব্লক মোড - নষ্ট সিট ব্লক করতে চাপ দাও</button>
-<div style="text-align:center;font-size:10px;color:#555;margin-top:6px">N-1,N-2 + M-1 to M-4 + A-J:40 + K1-K5:5 = Total 51 Seats | K6 Removed</div>
+<div style="text-align:center;font-size:10px;color:#555;margin-top:6px" id="planNote">N-1,N-2 + M-1 to M-4 + A-J:40 + K1,K2,K3,K4,K6 = Total 51 Seats</div>
 </div>
 <div style="background:#fff3cd;border-radius:10px;padding:10px;margin-top:12px">
 <label>তুমি কিভাবে টাকা নিছো? (অনলাইন থেকে আসলে অটো আসবে)</label>
@@ -205,6 +218,9 @@ function saveBlocked(){ localStorage.setItem('nur_blocked',JSON.stringify(blocke
 function getNextNo(){ let max=0; records.forEach(r=>{ let n=parseInt(r.no); if(n>max) max=n; }); return max+1; }
 function showNextNo(){ document.getElementById('inNo').value=toBn(String(getNextNo()).padStart(3,'0')); }
 function fareForSeat(s){ if(s.startsWith('M-')||s.startsWith('N-')) return 800; return 1020; }
+// বাস অনুযায়ী সিট প্ল্যান + স্থান
+function busInfo(gari){ if(String(gari)==='১'||String(gari)==='1') return {no:'০১',place:'গৌরীপুর',k:['K1','K2','K3','K4','K6']}; if(String(gari)==='২'||String(gari)==='2') return {no:'০২',place:'শম্ভুগঞ্জ',k:['K1','K2','K3','K4','K5']}; return {no:toBn(gari),place:'-',k:['K1','K2','K3','K4','K5']}; }
+function getKSeats(gari){ return busInfo(gari).k; }
 function autoByPhone(){
   let ph=cleanPhone(document.getElementById('inPhone').value);
   if(ph.length<6) return;
@@ -240,8 +256,15 @@ rows.forEach(r=>{
   mg.innerHTML+=`<div class="goli">GOLI</div>`;
   [3,4].forEach(n=>{ let s=r+'-'+n; mg.innerHTML+=`<div class="sBox" data-seat="${s}" onclick="toggleSeat('${s}')"><b>${s}</b><br><small>Name: ...</small></div>`; });
 });
-let lr=document.getElementById('lastRow');
-['K1','K2','K3','K4','K5'].forEach(s=>{ lr.innerHTML+=`<div class="sBox" data-seat="${s}" onclick="toggleSeat('${s}')"><b>${s}</b><br><small>Name: ...</small></div>`; });
+function renderLastRow(){
+  let lr=document.getElementById('lastRow');
+  let k=getKSeats(document.getElementById('inGari').value);
+  lr.innerHTML='';
+  k.forEach(s=>{ lr.innerHTML+=`<div class="sBox" data-seat="${s}" onclick="toggleSeat('${s}')"><b>${s}</b><br><small>Name: ...</small></div>`; });
+  let info=busInfo(document.getElementById('inGari').value);
+  document.getElementById('planSub').textContent='SEAT PLAN | বাস নং '+info.no+' | স্থানঃ '+info.place+' | TOTAL 51 SEAT';
+  document.getElementById('planNote').textContent='N-1,N-2 + M-1 to M-4 + A-J:40 + '+k.join(',')+' = Total 51 Seats';
+}
 function blockedSeats(){ return blocked.filter(b=>b.gari===document.getElementById('inGari').value && b.date===document.getElementById('inDate').value).map(b=>b.seat); }
 function bookedSeats(){ let all=[]; records.forEach(r=>{ if(r.gari===document.getElementById('inGari').value && r.date===document.getElementById('inDate').value && (r.status||'confirmed')!=='pending'){ r.seats.forEach(s=>{ if(s!=='দাঁড়ানো') all.push(s); }); } }); return all; }
 function pendingSeats(){ let all=[]; records.forEach(r=>{ if(r.gari===document.getElementById('inGari').value && r.date===document.getElementById('inDate').value && r.status==='pending'){ r.seats.forEach(s=>{ if(s!=='দাঁড়ানো') all.push(s); }); } }); return all; }
@@ -262,6 +285,7 @@ function toggleSeat(s){
 }
 function clearSeats(){ selected=[]; updateUI(); }
 function updateUI(){
+  renderLastRow();
   let booked=bookedSeats(); let pend=pendingSeats(); let blk=blockedSeats();
   let curGari=document.getElementById('inGari').value; let curDate=document.getElementById('inDate').value;
   document.querySelectorAll('.sBox').forEach(el=>{
@@ -280,12 +304,25 @@ function updateUI(){
   updateTotal(); renderRecord(); showNextNo();
 }
 function saveRecords(){ localStorage.setItem('nur_records', JSON.stringify(records)); }
+// টিকেটের ভিতরের সিট প্ল্যান - বাস অনুযায়ী
+function ticketPlanHTML(r){
+  if(r.seats[0]==='দাঁড়ানো') return `<div class="ticketPlan"><div class="tpHead">যাত্রী সিট প্ল্যান</div><div class="tpSub">বাস নং ${busInfo(r.gari).no} | স্থানঃ ${busInfo(r.gari).place} | দাঁড়ানো যাত্রী</div><div class="tpLegend">এই টিকেটটি দাঁড়ানো যাত্রীর জন্য</div></div>`;
+  let mine=s=>r.seats.includes(s)?' mine':'';
+  let front=['M-1','M-2','M-3','M-4','N-1','N-2'].map(s=>`<div class="tpCell${mine(s)}">${s}</div>`).join('');
+  let grid='';
+  rows.forEach(rr=>{
+    grid+=`<div class="tpCell${mine(rr+'-1')}">${rr}-1</div><div class="tpCell${mine(rr+'-2')}">${rr}-2</div><div class="goli2">GOLI</div><div class="tpCell${mine(rr+'-3')}">${rr}-3</div><div class="tpCell${mine(rr+'-4')}">${rr}-4</div>`;
+  });
+  let last=getKSeats(r.gari).map(s=>`<div class="tpCell${mine(s)}">${s}</div>`).join('');
+  return `<div class="ticketPlan"><div class="tpHead">যাত্রী সিট প্ল্যান</div><div class="tpSub">বাস নং ${busInfo(r.gari).no} | স্থানঃ ${busInfo(r.gari).place}</div><div class="tpTop"><div style="background:#ff5252;color:#fff">প্রবেশ</div><div style="background:#8ecdf5">বনাট</div><div style="background:#000;color:#fff">◎ চালক</div></div><div class="tpFront"><div></div>${front.slice(0,0)}<div class="tpCell${mine('M-1')}">M-1</div><div class="tpCell${mine('M-2')}">M-2</div></div><div class="tpFront"><div></div><div class="tpCell${mine('M-3')}">M-3</div><div class="tpCell${mine('M-4')}">M-4</div></div><div class="tpFront"><div></div><div class="tpCell${mine('N-1')}">N-1</div><div class="tpCell${mine('N-2')}">N-2</div></div><div class="tpGrid">${grid}</div><div class="tpLast">${last}</div><div class="tpLegend">🟥 লাল = আপনার সিট (${r.seats.join(', ')}) | ⬜ সাদা = অন্য সিট</div></div>`;
+}
 function ticketHTML(r){
   let isPending=r.status==='pending';
-  let qr=`NURMAHAL | NO.${r.no} | Gari No:${r.gari} | ${r.name} | ${r.phone} | ${r.date} | Seat:${r.seats.join(', ')} | Total ${r.total} Taka | ${r.payMethod||''} Trx:${r.trxId||''} | Status:${r.status||'confirmed'}`;
+  // টিকেটে পেমেন্ট / TrxID দেখানো হবে না - শুধু ওয়েবসাইট রেকর্ডে থাকবে
+  let qr=`NURMAHAL | NO.${r.no} | Gari No:${r.gari} | ${r.name} | ${r.phone} | ${r.date} | Seat:${r.seats.join(', ')} | Total ${r.total} Taka | Status:${r.status||'confirmed'}`;
   let seatLabel=r.seats[0]==='দাঁড়ানো' ? 'দাঁড়ানো ('+toBn(r.standCount||1)+' জন)' : r.seats.join(', ');
   let seatCount=r.seats[0]==='দাঁড়ানো' ? (r.standCount||1) : r.seats.length;
-  return `<div class="ticket"><div class="head"><div class="bus">🚌</div><div><h3>নূরমহল সুরেশ্বর বাস কাফেলা</h3><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ</p></div></div><div class="gold"></div><div class="body"><div><div class="trow"><span>টিকিট নং: ${toBn(r.no)}</span><span style="font-size:11px;background:${isPending?'#ff9800':'#e8f5e9'};color:${isPending?'#fff':'#0d5c3f'};padding:3px 8px;border-radius:10px">${isPending?'⏳ পেন্ডিং':'✅ পেমেন্ট কনফার্ম'}</span></div><div class="gariRow">🚌 গাড়ি নং: ${r.gari}</div><div class="frow"><div>নাম: <b>${r.name}</b></div><div>ঠিকানা: <b>${r.thikana}</b></div></div><div class="frow"><div>মোবা: <b>${toBn(r.phone)}</b></div><div>যাত্রার তারিখ: <b>${toBn(r.date)}</b></div></div><div class="frow"><div>উঠার স্থান: <b>${r.board}</b></div><div>মোট ভাড়া: <b>${toBn(r.total)} টাকা</b></div></div><div class="frow"><div>পেমেন্ট: <b>${r.payMethod||'Cash - হাতে নগদ'}</b></div><div>TrxID: <b>${r.trxId||'ক্যাশ'}</b></div></div><div class="seatRow"><div class="seatBox"><div class="lbl">সিট নং (${toBn(seatCount)}টা)</div><div class="val">${seatLabel}</div></div><div class="qrBox"><img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qr)}"><p>টিকেট অনলাইন চেকিং হবে</p></div></div>${isPending?'<div class="pendingBar">⏳ পেমেন্ট যাচাই চলছে - অ্যাডমিন কনফার্ম করলে কনফার্ম হবে</div>':''}</div><div class="foot">🙏 আপনার যাত্রা শুভ হোক | তরিকুল ০১৯২৩-৫৩১৫১০</div></div></div>`;
+  return `<div class="ticket"><div class="head"><div class="bus">🚌</div><div><h3>নূরমহল সুরেশ্বর বাস কাফেলা</h3><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ</p></div></div><div class="gold"></div><div class="body"><div><div class="trow"><span>টিকিট নং: ${toBn(r.no)}</span><span style="font-size:11px;background:${isPending?'#ff9800':'#e8f5e9'};color:${isPending?'#fff':'#0d5c3f'};padding:3px 8px;border-radius:10px">${isPending?'⏳ পেন্ডিং':'✅ পেমেন্ট কনফার্ম'}</span></div><div class="gariRow">🚌 গাড়ি নং: ${r.gari} | স্থানঃ ${busInfo(r.gari).place}</div><div class="frow"><div>নাম: <b>${r.name}</b></div><div>ঠিকানা: <b>${r.thikana}</b></div></div><div class="frow"><div>মোবা: <b>${toBn(r.phone)}</b></div><div>যাত্রার তারিখ: <b>${toBn(r.date)}</b></div></div><div class="frow"><div>উঠার স্থান: <b>${r.board}</b></div><div>মোট ভাড়া: <b>${toBn(r.total)} টাকা</b></div></div><div class="seatRow"><div class="seatBox"><div class="lbl">সিট নং (${toBn(seatCount)}টা)</div><div class="val">${seatLabel}</div></div><div class="qrBox"><img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qr)}"><p>টিকেট অনলাইন চেকিং হবে</p></div></div>${ticketPlanHTML(r)}${isPending?'<div class="pendingBar">⏳ পেমেন্ট যাচাই চলছে - অ্যাডমিন কনফার্ম করলে কনফার্ম হবে</div>':''}</div><div class="foot">🙏 আপনার যাত্রা শুভ হোক | তরিকুল ০১৯২৩-৫৩১৫১০</div></div></div>`;
 }
 function getFiltered(){
   let q=(document.getElementById('searchBox').value||'').trim().toLowerCase();
@@ -426,4 +463,4 @@ document.getElementById('inDate').value=todayLocal();
 updateUI();
 </script>
 </body>
-                                                                                                                                                                                    </html>
+                                                                         </html>
