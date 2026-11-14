@@ -43,10 +43,14 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .tpFront{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:6px}
 .tpGrid{display:grid;grid-template-columns:1fr 1fr 18px 1fr 1fr;gap:4px}
 .tpGrid .goli2{display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-weight:900;color:#888;font-size:9px}
-.tpCell{border:1.2px solid #333;border-radius:6px;background:#fff;padding:4px 2px;text-align:center;font-size:10px;font-weight:900;line-height:1.2}
+.tpCell{border:1.2px solid #333;border-radius:6px;background:#fff;padding:4px 2px;text-align:center;font-size:10px;font-weight:900;line-height:1.2;min-height:28px;overflow:hidden}
+.tpCell small{display:block;font-size:8px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tpCell.mine{background:#d32f2f!important;color:#fff!important;border-color:#d32f2f}
+.tpCell.booked{background:#0d5c3f!important;color:#fff!important;border-color:#0d5c3f}
+.tpCell.pending{background:#ff9800!important;color:#fff!important;border-color:#ff9800}
+.tpCell.blocked{background:#333!important;color:#fff!important;border-color:#333}
 .tpLast{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:6px}
-.tpLegend{text-align:center;font-size:10px;font-weight:900;margin-top:6px;color:#333}
+.tpLegend{text-align:center;font-size:10px;font-weight:900;margin-top:6px;color:#333;line-height:1.6}
 .planBox{margin-top:12px;border:2px solid #0d3a6b;border-radius:14px;padding:10px;background:#fff8d6}
 .planHead{text-align:center;font-weight:900;color:#0d3a6b;font-size:15px}
 .planSub{text-align:center;font-weight:900;font-size:13px;margin:2px 0 8px}
@@ -100,7 +104,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .legend span{padding:4px 8px;border-radius:20px}
 @media print{
   body{background:#fff;padding:0} .form,.btnPrint,.btnDown,.hidePrint,.recBox{display:none!important}
-  .page{max-width:100%!important;width:100%!important;padding:0;margin:0;display:grid!important;grid-template-columns:1fr 1fr!important;gap:4mm!important}
+  .page{max-width:100%!important;width:100%!important;padding:0;margin:0;display:grid!important;grid-template-columns:1fr 1fr 1fr!important;gap:3mm!important}
   @page{size:A4;margin:8mm} .ticket{break-inside:avoid;zoom:0.52}
   #printList{display:block!important}
   #printList table{width:100%;border-collapse:collapse} #printList th,#printList td{border:1px solid #000;padding:6px;font-size:13px}
@@ -185,7 +189,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <button class="btn" id="mainBtn" onclick="make()">✅ এই টিকেটটা বানাও + রেকর্ডে জমা করো</button>
 </div>
 <button class="btnPrint hidePrint" onclick="window.print()">🖨️ এই টিকেট প্রিন্ট করো</button>
-<button class="btnPrint hidePrint" style="background:#0d5c3f;color:#fff" onclick="printAllTickets()">🖨️ সব টিকেট প্রিন্ট করো - ১ পেজে ৪টা</button>
+<button class="btnPrint hidePrint" style="background:#0d5c3f;color:#fff" onclick="printAllTickets()">🖨️ সব টিকেট প্রিন্ট করো - ১ পেজে ৬টা</button>
 <button class="btnDown hidePrint" onclick="downloadTicket()">📥 HD টিকেট ছবি ডাউনলোড করো - ১টা টিকেট</button>
 <div class="page" id="page"></div>
 <div id="printList"></div>
@@ -306,13 +310,28 @@ function updateUI(){
 function saveRecords(){ localStorage.setItem('nur_records', JSON.stringify(records)); }
 function ticketPlanHTML(r){
   if(r.seats[0]==='দাঁড়ানো') return `<div class="ticketPlan"><div class="tpHead">যাত্রী সিট প্ল্যান</div><div class="tpSub">বাস নং ${busInfo(r.gari).no} | স্থানঃ ${busInfo(r.gari).place} | দাঁড়ানো যাত্রী</div><div class="tpLegend">এই টিকেটটি দাঁড়ানো যাত্রীর জন্য</div></div>`;
-  let mine=s=>r.seats.includes(s)?' mine':'';
+  let seatMap={};
+  records.forEach(rec=>{
+    if(rec.gari===r.gari && rec.date===r.date){
+      rec.seats.forEach(s=>{ if(s!=='দাঁড়ানো') seatMap[s]={name:rec.name, st:(rec.status||'confirmed')}; });
+    }
+  });
+  let blkList=(typeof blocked!=='undefined'?blocked:[]).filter(b=>b.gari===r.gari && b.date===r.date).map(b=>b.seat);
+  function tpCell(s){
+    if(r.seats.includes(s)) return `<div class="tpCell mine">${s}<small>${r.name}</small></div>`;
+    if(blkList.includes(s)) return `<div class="tpCell blocked">${s}<small>ব্লক</small></div>`;
+    if(seatMap[s]){
+      if(seatMap[s].st==='pending') return `<div class="tpCell pending">${s}<small>${seatMap[s].name}</small></div>`;
+      return `<div class="tpCell booked">${s}<small>${seatMap[s].name}</small></div>`;
+    }
+    return `<div class="tpCell">${s}<small>&nbsp;</small></div>`;
+  }
   let grid='';
   rows.forEach(rr=>{
-    grid+=`<div class="tpCell${mine(rr+'-1')}">${rr}-1</div><div class="tpCell${mine(rr+'-2')}">${rr}-2</div><div class="goli2">GOLI</div><div class="tpCell${mine(rr+'-3')}">${rr}-3</div><div class="tpCell${mine(rr+'-4')}">${rr}-4</div>`;
+    grid+=tpCell(rr+'-1')+tpCell(rr+'-2')+`<div class="goli2">GOLI</div>`+tpCell(rr+'-3')+tpCell(rr+'-4');
   });
-  let last=getKSeats(r.gari).map(s=>`<div class="tpCell${mine(s)}">${s}</div>`).join('');
-  return `<div class="ticketPlan"><div class="tpHead">যাত্রী সিট প্ল্যান</div><div class="tpSub">বাস নং ${busInfo(r.gari).no} | স্থানঃ ${busInfo(r.gari).place}</div><div class="tpTop"><div style="background:#ff5252;color:#fff">প্রবেশ</div><div style="background:#8ecdf5">বনাট</div><div style="background:#000;color:#fff">◎ চালক</div></div><div class="tpFront"><div class="tpCell${mine('N-3')}">N-3</div><div class="tpCell${mine('M-1')}">M-1</div><div class="tpCell${mine('M-2')}">M-2</div></div><div class="tpFront"><div class="tpCell${mine('N-4')}">N-4</div><div class="tpCell${mine('M-3')}">M-3</div><div class="tpCell${mine('M-4')}">M-4</div></div><div class="tpFront"><div></div><div class="tpCell${mine('N-1')}">N-1</div><div class="tpCell${mine('N-2')}">N-2</div></div><div class="tpGrid">${grid}</div><div class="tpLast">${last}</div><div class="tpLegend">🟥 লাল = আপনার সিট (${r.seats.join(', ')}) | ⬜ সাদা = অন্য সিট</div></div>`;
+  let last=getKSeats(r.gari).map(s=>tpCell(s)).join('');
+  return `<div class="ticketPlan"><div class="tpHead">যাত্রী সিট প্ল্যান</div><div class="tpSub">বাস নং ${busInfo(r.gari).no} | স্থানঃ ${busInfo(r.gari).place}</div><div class="tpTop"><div style="background:#ff5252;color:#fff">প্রবেশ</div><div style="background:#8ecdf5">বনাট</div><div style="background:#000;color:#fff">◎ চালক</div></div><div class="tpFront">${tpCell('N-3')}${tpCell('M-1')}${tpCell('M-2')}</div><div class="tpFront">${tpCell('N-4')}${tpCell('M-3')}${tpCell('M-4')}</div><div class="tpFront"><div></div>${tpCell('N-1')}${tpCell('N-2')}</div><div class="tpGrid">${grid}</div><div class="tpLast">${last}</div><div class="tpLegend">🟥 লাল = আপনার সিট | 🟩 সবুজ + নাম = বুকড | 🟧 কমলা + নাম = পেন্ডিং | ⬛ কালো = ব্লক | ⬜ সাদা = খালি</div></div>`;
 }
 function ticketHTML(r){
   let isPending=r.status==='pending';
@@ -341,7 +360,7 @@ function getFiltered(){
 function clearFilter(){ document.getElementById('searchBox').value=''; document.getElementById('filterThikana').value=''; document.getElementById('filterGari').value=''; document.getElementById('filterDate').value=''; document.getElementById('filterStatus').value=''; document.getElementById('filterPay').value=''; renderRecord(); }
 function printList(){
   let list=getFiltered();
-  let html=`<h2 style="text-align:center">নূরমহল - যাত্রীর লিস্ট</h2><p style="text-align:center">মোট ${toBn(list.length)} টিকেট | মোট ${toBn(list.reduce((a,r)=>a+(r.seats[0]==='দাঁড়ানো'?(r.standCount||1):r.seats.length),0))} জন | মোট ${toBn(list.reduce((a,r)=>a+r.total,0))} টাকা</p><table><tr><th>টিকেট</th><th>নাম</th><th>মোবা</th><th>ঠিকানা</th><th>সিট</th><th>গাড়ি</th><th>ভাড়া</th><th>পেমেন্ট</th></tr>`+list.map(r=>`<tr><td>${toBn(r.no)}</td><td>${r.name}</td><td>${toBn(r.phone)}</td><td>${r.thikana}</td><td>${r.seats[0]==='দাঁড়ানো'?'দাঁড়ানো ('+toBn(r.standCount||1)+' জন)':r.seats.join(', ')}</td><td>${r.gari}</td><td>${toBn(r.total)}</td><td>${r.payMethod||''} ${r.trxId||''}</td></tr>`).join('')+`</table>`;
+  let html=`<h2 style="text-align:center">নূরমহল - যাত্রীর লিস্ট</h2><p style="text-align:center">মোট ${toBn(list.length)} টিকেট | মোট ${toBn(list.reduce((a,r)=>a+(r.seats[0]==='দাঁড়ানো'?(r.standCount||1):r.seats.length),0))} জন | মোট ${toBn(list.reduce((a,r)=>a+r.total,0))} টাকা</p><table><tr><th>টিকেট</th><th>নাম</th><th>মোবা</th><th>ঠিকানা</th><th>সিট</th><th>গাড়ি</th><th>ভাড়া</th><th>পেমেন্ট</th></tr>`+list.map(r=>`<tr><td>${toBn(r.no)}</td><td>${r.name}</td><td>${r.phone}</td><td>${r.thikana}</td><td>${r.seats[0]==='দাঁড়ানো'?'দাঁড়ানো ('+toBn(r.standCount||1)+' জন)':r.seats.join(', ')}</td><td>${r.gari}</td><td>${toBn(r.total)}</td><td>${r.payMethod||''} ${r.trxId||''}</td></tr>`).join('')+`</table>`;
   document.getElementById('printList').innerHTML=html;
   document.getElementById('page').innerHTML='';
   window.print();
@@ -468,4 +487,4 @@ document.getElementById('inDate').value=todayLocal();
 updateUI();
 </script>
 </body>
-  </html>
+                                                                          </html>
