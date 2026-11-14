@@ -100,8 +100,9 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .legend span{padding:4px 8px;border-radius:20px}
 @media print{
   body{background:#fff;padding:0} .form,.btnPrint,.btnDown,.hidePrint,.recBox{display:none!important}
-  .page{max-width:100%;width:100%;padding:0;margin:0}
-  @page{size:A4;margin:8mm} .ticket{break-inside:avoid} #printList{display:block!important}
+  .page{max-width:100%!important;width:100%!important;padding:0;margin:0;display:grid!important;grid-template-columns:1fr 1fr!important;gap:4mm!important}
+  @page{size:A4;margin:8mm} .ticket{break-inside:avoid;zoom:0.52}
+  #printList{display:block!important}
   #printList table{width:100%;border-collapse:collapse} #printList th,#printList td{border:1px solid #000;padding:6px;font-size:13px}
 }
 #printList{display:none}
@@ -184,7 +185,8 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <button class="btn" id="mainBtn" onclick="make()">✅ এই টিকেটটা বানাও + রেকর্ডে জমা করো</button>
 </div>
 <button class="btnPrint hidePrint" onclick="window.print()">🖨️ এই টিকেট প্রিন্ট করো</button>
-<button class="btnDown hidePrint" onclick="downloadTicket()">📥 HD টিকেট ছবি ডাউনলোড করো</button>
+<button class="btnPrint hidePrint" style="background:#0d5c3f;color:#fff" onclick="printAllTickets()">🖨️ সব টিকেট প্রিন্ট করো - ১ পেজে ৪টা</button>
+<button class="btnDown hidePrint" onclick="downloadTicket()">📥 HD টিকেট ছবি ডাউনলোড করো - ১টা টিকেট</button>
 <div class="page" id="page"></div>
 <div id="printList"></div>
 <div class="recBox hidePrint">
@@ -344,6 +346,14 @@ function printList(){
   document.getElementById('page').innerHTML='';
   window.print();
 }
+function printAllTickets(){
+  let list=getFiltered();
+  if(!list.length){ alert('প্রিন্ট করার মতো কোনো টিকেট নাই ভাই!'); return; }
+  document.getElementById('printList').innerHTML='';
+  document.getElementById('page').innerHTML=list.map(r=>ticketHTML(r)).join('');
+  document.getElementById('page').scrollIntoView({behavior:'smooth'});
+  setTimeout(()=>window.print(),600);
+}
 function renderRecord(){
   let list=getFiltered();
   let totSeat=0, totMoney=0;
@@ -458,4 +468,4 @@ document.getElementById('inDate').value=todayLocal();
 updateUI();
 </script>
 </body>
-                                                                                                    </html>
+  </html>
