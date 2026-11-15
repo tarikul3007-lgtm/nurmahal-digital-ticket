@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>নূরমহল - ফুল সিস্টেম</title>
+<title>নূরমহল বাস কাফেলা এডমিন সিস্টেম</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{box-sizing:border-box;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important} body{font-family:sans-serif;background:#eef2f7;margin:0;padding:12px}
@@ -15,41 +15,41 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .btn{width:100%;padding:14px;background:#0d5c3f;color:#fff;border:0;border-radius:12px;font-size:17px;font-weight:bold;margin-top:14px;cursor:pointer}
 .btnPrint{width:100%;max-width:520px;margin:0 auto 8px;display:block;padding:14px;background:#e8a91c;color:#000;border:0;border-radius:12px;font-size:17px;font-weight:bold;cursor:pointer}
 .btnDown{width:100%;max-width:520px;margin:0 auto 12px;display:block;padding:14px;background:#0d3a6b;color:#fff;border:0;border-radius:12px;font-size:17px;font-weight:bold;cursor:pointer}
-.page{max-width:260px;margin:0 auto}
-/* === টিকেট ২ গুণ ছোট করা হইছে === */
-.ticket{border:1.5px solid #0d3a6b;border-radius:10px;overflow:hidden;background:#fff;display:flex;flex-direction:column;max-width:260px;margin:0 auto}
-.head{background:linear-gradient(90deg,#0d3a6b,#155e9e)!important;color:#fff;padding:6px 8px;display:flex;gap:6px;align-items:center}
-.head .bus{font-size:18px;background:#fff;border-radius:6px;padding:2px 4px;flex-shrink:0;line-height:1}
-.head h3{margin:0;font-size:12px;line-height:1.2;white-space:nowrap}
-.head p{margin:2px 0 0;font-size:8px;color:#ffe58a;white-space:nowrap}
-.gold{height:3px;background:linear-gradient(90deg,#e8a91c,#ffcf3f)!important}
-.body{padding:7px 8px 5px;flex:1;display:flex;flex-direction:column}
-.trow{display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:9px;color:#0d3a6b}
-.gariRow{background:#fff2a8!important;border:1px solid #e8a91c;border-radius:6px;text-align:center;font-weight:900;font-size:10px;color:#0d3a6b;padding:3px;margin-top:5px}
-.frow{display:flex;gap:8px;margin-top:5px;font-size:9px}
-.frow div{flex:1;border-bottom:1px dashed #bbb;padding-bottom:2px;min-width:0;word-break:break-word}
-.seatRow{display:flex;align-items:center;gap:6px;margin-top:6px}
-.seatBox{flex:1;background:#fff2a8!important;border:1.5px solid #e8a91c;border-radius:7px;padding:4px;text-align:center}
-.seatBox .lbl{font-size:8px;font-weight:bold;color:#555}
-.seatBox .val{font-size:13px;font-weight:900;color:#d32f2f;line-height:1.2;word-break:break-word}
+.page{max-width:135px;margin:0 auto}
+/* === টিকেট আরো ২ গুণ ছোট - 135px === */
+.ticket{border:1px solid #0d3a6b;border-radius:6px;overflow:hidden;background:#fff;display:flex;flex-direction:column;max-width:135px;margin:0 auto}
+.head{background:linear-gradient(90deg,#0d3a6b,#155e9e)!important;color:#fff;padding:3px 4px;display:flex;gap:3px;align-items:center}
+.head .bus{font-size:10px;background:#fff;border-radius:4px;padding:1px 2px;flex-shrink:0;line-height:1}
+.head h3{margin:0;font-size:7px;line-height:1.2;white-space:nowrap}
+.head p{margin:1px 0 0;font-size:5px;color:#ffe58a;white-space:nowrap}
+.gold{height:2px;background:linear-gradient(90deg,#e8a91c,#ffcf3f)!important}
+.body{padding:4px 4px 3px;flex:1;display:flex;flex-direction:column}
+.trow{display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:6px;color:#0d3a6b}
+.gariRow{background:#fff2a8!important;border:1px solid #e8a91c;border-radius:4px;text-align:center;font-weight:900;font-size:6px;color:#0d3a6b;padding:2px;margin-top:3px}
+.frow{display:flex;gap:4px;margin-top:3px;font-size:6px}
+.frow div{flex:1;border-bottom:1px dashed #bbb;padding-bottom:1px;min-width:0;word-break:break-word}
+.seatRow{display:flex;align-items:center;gap:3px;margin-top:3px}
+.seatBox{flex:1;background:#fff2a8!important;border:1px solid #e8a91c;border-radius:4px;padding:2px;text-align:center}
+.seatBox .lbl{font-size:5px;font-weight:bold;color:#555}
+.seatBox .val{font-size:8px;font-weight:900;color:#d32f2f;line-height:1.2;word-break:break-word}
 .qrBox{text-align:center;flex-shrink:0}
-.qrBox img{width:42px;height:42px;border:1.5px solid #0d3a6b;border-radius:5px}
-.qrBox p{margin:2px 0 0;font-size:7px;font-weight:bold;color:#0d5c3f;white-space:nowrap}
-.foot{background:#e8f5e9!important;color:#0d5c3f;text-align:center;font-size:8px;font-weight:bold;padding:4px;border-top:1px solid #e8a91c;line-height:1.4;white-space:nowrap;overflow:hidden;margin-top:6px}
-/* === যাত্রী সিট প্ল্যান ২ গুণ ছোট === */
-.ticketPlan{margin-top:7px;border:1.5px solid #0d3a6b;border-radius:8px;padding:5px;background:#fff8d6}
-.ticketPlan .tpHead{text-align:center;font-weight:900;color:#0d3a6b;font-size:9px}
-.ticketPlan .tpSub{text-align:center;font-weight:900;font-size:8px;color:#d32f2f;margin:1px 0 4px}
-.tpTop{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;margin-bottom:3px}
-.tpTop div{text-align:center;font-weight:900;padding:3px 1px;border-radius:5px;font-size:7px}
-.tpFront{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;margin-bottom:3px}
-.tpGrid{display:grid;grid-template-columns:1fr 1fr 10px 1fr 1fr;gap:2px}
-.tpGrid .goli2{display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-weight:900;color:#888;font-size:6px}
-.tpCell{border:1px solid #333;border-radius:3px;background:#fff;padding:2px 1px;text-align:center;font-size:7px;font-weight:900;line-height:1.2;min-height:16px;overflow:hidden}
-.tpCell small{display:block;font-size:6px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qrBox img{width:22px;height:22px;border:1px solid #0d3a6b;border-radius:3px}
+.qrBox p{margin:1px 0 0;font-size:4px;font-weight:bold;color:#0d5c3f;white-space:nowrap}
+.foot{background:#e8f5e9!important;color:#0d5c3f;text-align:center;font-size:5px;font-weight:bold;padding:2px;border-top:1px solid #e8a91c;line-height:1.4;white-space:nowrap;overflow:hidden;margin-top:3px}
+/* === সিট প্ল্যান আরো ২ গুণ ছোট === */
+.ticketPlan{margin-top:4px;border:1px solid #0d3a6b;border-radius:5px;padding:3px;background:#fff8d6}
+.ticketPlan .tpHead{text-align:center;font-weight:900;color:#0d3a6b;font-size:6px}
+.ticketPlan .tpSub{text-align:center;font-weight:900;font-size:5px;color:#d32f2f;margin:1px 0 2px}
+.tpTop{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin-bottom:2px}
+.tpTop div{text-align:center;font-weight:900;padding:2px 1px;border-radius:3px;font-size:4px}
+.tpFront{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin-bottom:2px}
+.tpGrid{display:grid;grid-template-columns:1fr 1fr 6px 1fr 1fr;gap:1px}
+.tpGrid .goli2{display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-weight:900;color:#888;font-size:4px}
+.tpCell{border:0.7px solid #333;border-radius:2px;background:#fff;padding:1px 0;text-align:center;font-size:4.5px;font-weight:900;line-height:1.2;min-height:9px;overflow:hidden}
+.tpCell small{display:block;font-size:3.5px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tpCell.mine{background:#d32f2f!important;color:#fff!important;border-color:#d32f2f}
-.tpLast{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:3px}
-.tpLegend{text-align:center;font-size:7px;font-weight:900;margin-top:3px;color:#333;line-height:1.5}
+.tpLast{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:2px}
+.tpLegend{text-align:center;font-size:4.5px;font-weight:900;margin-top:2px;color:#333;line-height:1.5}
 .planBox{margin-top:12px;border:2px solid #0d3a6b;border-radius:14px;padding:10px;background:#fff8d6}
 .planHead{text-align:center;font-weight:900;color:#0d3a6b;font-size:15px}
 .planSub{text-align:center;font-weight:900;font-size:13px;margin:2px 0 8px}
@@ -93,7 +93,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .listTable{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
 .listTable th,.listTable td{border:1px solid #ddd;padding:6px;text-align:left}
 .listTable th{background:#0d3a6b;color:#fff}
-.pendingBar{background:#ff9800;color:#fff;text-align:center;font-weight:900;padding:9px;border-radius:8px;margin-top:9px}
+.pendingBar{background:#ff9800;color:#fff;text-align:center;font-weight:900;padding:4px;border-radius:5px;margin-top:4px;font-size:6px}
 .statBox{background:#fff3cd;border:2px solid #ff9800;border-radius:12px;padding:10px;margin-top:10px}
 .statGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
 .statGrid div{background:#fff;border-radius:9px;padding:8px 4px;text-align:center;font-weight:900;font-size:12px;line-height:1.5}
@@ -104,7 +104,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 @media print{
   body{background:#fff;padding:0} .form,.btnPrint,.btnDown,.hidePrint,.recBox{display:none!important}
   .page{max-width:100%!important;width:100%!important;padding:0;margin:0;display:grid!important;grid-template-columns:1fr 1fr 1fr!important;gap:3mm!important}
-  @page{size:A4;margin:8mm} .ticket{break-inside:avoid;zoom:0.52;max-width:260px}
+  @page{size:A4;margin:8mm} .ticket{break-inside:avoid;zoom:0.52;max-width:135px}
   #printList{display:block!important}
   #printList table{width:100%;border-collapse:collapse} #printList th,#printList td{border:1px solid #000;padding:6px;font-size:13px}
 }
@@ -113,7 +113,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 </head>
 <body>
 <div class="form hidePrint">
-<h2>🚌 নূরমহল - ফুল সিস্টেম</h2>
+<h2>🚌 নূরমহল - বাস কাফেলা এডমিনসিস্টেম</h2>
 <p>টিকেট নং অটো | ভাড়া সিট অনুযায়ী অটো | দাঁড়ানো টিকেট আছে</p>
 <div class="statBox">
 <div style="text-align:center;font-weight:900">⏳ পেন্ডিং: <span id="pendingCount">০</span> টা | ✅ কনফার্ম: <span id="confirmCount">০</span> টা | মোট: <span id="totalTicket">০</span> টা</div>
@@ -213,6 +213,8 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <script>
 function toBn(n){return String(n).replace(/[0-9]/g,d=>"০১২৩৪৫৬৭৮৯"[d])}
 function toEn(s){return String(s).replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d))}
+// === তারিখ: 2026-11-17 -> ১৭-১১-২০২৬ (দিন-মাস-সাল) ===
+function formatDateDMY(d){ if(!d) return '---'; let p=String(d).split('-'); if(p.length!==3) return d; return toBn(p[2]+'-'+p[1]+'-'+p[0]); }
 function cleanPhone(s){return toEn(String(s||'')).replace(/[^0-9]/g,'')}
 function todayLocal(){ let d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 let selected=[]; let standing=false; let blockMode=false; let editIndex=-1;
@@ -307,12 +309,10 @@ function updateUI(){
   updateTotal(); renderRecord(); showNextNo();
 }
 function saveRecords(){ localStorage.setItem('nur_records', JSON.stringify(records)); }
-// === ডাউনলোডের টিকেটের সিট প্ল্যান - এখানেই প্রাইভেসি ===
 function ticketPlanHTML(r){
   if(r.seats[0]==='দাঁড়ানো') return `<div class="ticketPlan"><div class="tpHead">যাত্রী সিট প্ল্যান</div><div class="tpSub">বাস নং ${busInfo(r.gari).no} | স্থানঃ ${busInfo(r.gari).place} | দাঁড়ানো যাত্রী</div><div class="tpLegend">এই টিকেটটি দাঁড়ানো যাত্রীর জন্য</div></div>`;
   function tpCell(s){
     if(r.seats.includes(s)) return `<div class="tpCell mine">${s}<small>${r.name}</small></div>`;
-    // বাকি সব সিটে শুধু নাম্বার - নাম নাই, বুকড নাই, খালি নাই, কালার নাই
     return `<div class="tpCell">${s}<small>&nbsp;</small></div>`;
   }
   let grid='';
@@ -327,7 +327,8 @@ function ticketHTML(r){
   let qr=`NURMAHAL | NO.${r.no} | Gari No:${r.gari} | ${r.name} | ${r.phone} | ${r.date} | Seat:${r.seats.join(', ')} | Total ${r.total} Taka | Status:${r.status||'confirmed'}`;
   let seatLabel=r.seats[0]==='দাঁড়ানো' ? 'দাঁড়ানো ('+toBn(r.standCount||1)+' জন)' : r.seats.join(', ');
   let seatCount=r.seats[0]==='দাঁড়ানো' ? (r.standCount||1) : r.seats.length;
-  return `<div class="ticket"><div class="head"><div class="bus">🚌</div><div><h3>নূরমহল সুরেশ্বর বাস কাফেলা</h3><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ</p></div></div><div class="gold"></div><div class="body"><div><div class="trow"><span>টিকিট নং: ${toBn(r.no)}</span><span style="font-size:8px;background:${isPending?'#ff9800':'#e8f5e9'};color:${isPending?'#fff':'#0d5c3f'};padding:2px 6px;border-radius:10px">${isPending?'⏳ পেন্ডিং':'✅ পেমেন্ট কনফার্ম'}</span></div><div class="gariRow">🚌 গাড়ি নং: ${r.gari} | স্থানঃ ${busInfo(r.gari).place}</div><div class="frow"><div>নাম: <b>${r.name}</b></div><div>ঠিকানা: <b>${r.thikana}</b></div></div><div class="frow"><div>মোবা: <b>${toBn(r.phone)}</b></div><div>যাত্রার তারিখ: <b>${toBn(r.date)}</b></div></div><div class="frow"><div>উঠার স্থান: <b>${r.board}</b></div><div>মোট ভাড়া: <b>${toBn(r.total)} টাকা</b></div></div><div class="seatRow"><div class="seatBox"><div class="lbl">সিট নং (${toBn(seatCount)}টা)</div><div class="val">${seatLabel}</div></div><div class="qrBox"><img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qr)}"><p>টিকেট অনলাইন চেকিং হবে</p></div></div>${ticketPlanHTML(r)}${isPending?'<div class="pendingBar">⏳ পেমেন্ট যাচাই চলছে - অ্যাডমিন কনফার্ম করলে কনফার্ম হবে</div>':''}</div><div class="foot">🙏 আপনার যাত্রা শুভ হোক | তরিকুল ০১৯২৩-৫৩১৫১০</div></div></div>`;
+  // পেমেন্ট কনফার্ম হাইড করা হইছে - এখানে আর ব্যাজ নাই
+  return `<div class="ticket"><div class="head"><div class="bus">🚌</div><div><h3>নূরমহল সুরেশ্বর বাস কাফেলা</h3><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ</p></div></div><div class="gold"></div><div class="body"><div><div class="trow"><span>টিকিট নং: ${toBn(r.no)}</span><span></span></div><div class="gariRow">🚌 গাড়ি নং: ${r.gari} | স্থানঃ ${busInfo(r.gari).place}</div><div class="frow"><div>নাম: <b>${r.name}</b></div><div>ঠিকানা: <b>${r.thikana}</b></div></div><div class="frow"><div>মোবা: <b>${toBn(r.phone)}</b></div><div>যাত্রার তারিখ: <b>${formatDateDMY(r.date)}</b></div></div><div class="frow"><div>উঠার স্থান: <b>${r.board}</b></div><div>মোট ভাড়া: <b>${toBn(r.total)} টাকা</b></div></div><div class="seatRow"><div class="seatBox"><div class="lbl">সিট নং (${toBn(seatCount)}টা)</div><div class="val">${seatLabel}</div></div><div class="qrBox"><img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qr)}"><p>টিকেট অনলাইন চেকিং হবে</p></div></div>${ticketPlanHTML(r)}</div><div class="foot">🙏 আপনার যাত্রা শুভ হোক | তরিকুল ০১৯২৩-৫৩১৫১০</div></div></div>`;
 }
 function getFiltered(){
   let q=(document.getElementById('searchBox').value||'').trim().toLowerCase();
@@ -387,8 +388,8 @@ function renderRecord(){
     let ph=cleanPhone(r.phone);
     let st=r.status||'confirmed';
     let badge=st==='pending'?'<span style="background:#ff9800;color:#fff;padding:3px 8px;border-radius:10px;font-size:11px">⏳ পেন্ডিং</span>':'<span style="background:#e8f5e9;color:#0d5c3f;padding:3px 8px;border-radius:10px;font-size:11px">✅ কনফার্ম</span>';
-    let waText=encodeURIComponent(`🚌 নূরমহল সুরেশ্বর বাস কাফেলা\nটিকিট নং: ${r.no}\nনাম: ${r.name}\nসিট: ${r.seats.join(', ')}\nগাড়ি: ${r.gari}\nতারিখ: ${r.date}\nমোট ভাড়া: ${r.total} টাকা\nস্ট্যাটাস: ${st==='pending'?'পেন্ডিং':'কনফার্ম'}\nযাত্রা শুভ হোক! - তরিকুল 01923-531510`);
-    return `<div class="recItem ${st==='pending'?'pending':''}"><button class="del" onclick="delRecord(${idx})">❌ Delete</button><b>টিকিট নং ${toBn(r.no)} | গাড়ি ${r.gari} | ${r.date}</b> ${badge}<br>নাম: ${r.name} | মোবা: ${toBn(r.phone)}<br>ঠিকানা: <span style="cursor:pointer;color:#0d3a6b;text-decoration:underline" onclick="filterByThikana('${r.thikana}')">${r.thikana}</span> | ${r.board}<br>সিট: <b style="color:#d32f2f">${r.seats[0]==='দাঁড়ানো'?'দাঁড়ানো ('+toBn(r.standCount||1)+' জন)':r.seats.join(', ')}</b><br>মোট ভাড়া: ${toBn(r.total)} টাকা | ${r.payMethod||'Cash - হাতে নগদ'} ${r.trxId?'| TrxID: '+r.trxId:''} ${r.senderNo?'| পাঠাইছে: '+r.senderNo:''}<br>${st==='pending'?`<button class="smallBtn" style="background:#0d5c3f;color:#fff" onclick="confirmRecord(${idx})">✅ টাকা আসছে - কনফার্ম</button><button class="smallBtn" style="background:#d32f2f;color:#fff" onclick="delRecord(${idx})">❌ ভুয়া - বাতিল</button>`:''}<button class="smallBtn" onclick="editRecord(${idx})">✏️ এডিট</button><button class="smallBtn" onclick="reprint(${idx})">🖨️ দেখো</button><button class="smallBtn blue" onclick="reDownload(${idx})">📥 ছবি</button><a href="https://wa.me/88${ph}?text=${waText}" target="_blank"><button class="smallBtn green">💚 WhatsApp পাঠাও</button></a></div>`;
+    let waText=encodeURIComponent(`🚌 নূরমহল সুরেশ্বর বাস কাফেলা\nটিকিট নং: ${r.no}\nনাম: ${r.name}\nসিট: ${r.seats.join(', ')}\nগাড়ি: ${r.gari}\nতারিখ: ${formatDateDMY(r.date)}\nমোট ভাড়া: ${r.total} টাকা\nস্ট্যাটাস: ${st==='pending'?'পেন্ডিং':'কনফার্ম'}\nযাত্রা শুভ হোক! - তরিকুল 01923-531510`);
+    return `<div class="recItem ${st==='pending'?'pending':''}"><button class="del" onclick="delRecord(${idx})">❌ Delete</button><b>টিকিট নং ${toBn(r.no)} | গাড়ি ${r.gari} | ${formatDateDMY(r.date)}</b> ${badge}<br>নাম: ${r.name} | মোবা: ${toBn(r.phone)}<br>ঠিকানা: <span style="cursor:pointer;color:#0d3a6b;text-decoration:underline" onclick="filterByThikana('${r.thikana}')">${r.thikana}</span> | ${r.board}<br>সিট: <b style="color:#d32f2f">${r.seats[0]==='দাঁড়ানো'?'দাঁড়ানো ('+toBn(r.standCount||1)+' জন)':r.seats.join(', ')}</b><br>মোট ভাড়া: ${toBn(r.total)} টাকা | ${r.payMethod||'Cash - হাতে নগদ'} ${r.trxId?'| TrxID: '+r.trxId:''} ${r.senderNo?'| পাঠাইছে: '+r.senderNo:''}<br>${st==='pending'?`<button class="smallBtn" style="background:#0d5c3f;color:#fff" onclick="confirmRecord(${idx})">✅ টাকা আসছে - কনফার্ম</button><button class="smallBtn" style="background:#d32f2f;color:#fff" onclick="delRecord(${idx})">❌ ভুয়া - বাতিল</button>`:''}<button class="smallBtn" onclick="editRecord(${idx})">✏️ এডিট</button><button class="smallBtn" onclick="reprint(${idx})">🖨️ দেখো</button><button class="smallBtn blue" onclick="reDownload(${idx})">📥 ছবি</button><a href="https://wa.me/88${ph}?text=${waText}" target="_blank"><button class="smallBtn green">💚 WhatsApp পাঠাও</button></a></div>`;
   }).join('');
 }
 function filterByThikana(t){ document.getElementById('filterThikana').value=t; renderRecord(); document.getElementById('recList').scrollIntoView({behavior:'smooth'}); }
@@ -437,7 +438,7 @@ function importBackup(e){
 }
 function exportCSV(){
   let csv='Ticket No,Name,Phone,Thikana,Board,Gari,Date,Seat,Total,PayMethod,TrxID,Status\n';
-  records.forEach(r=>{ csv+=`${r.no},"${r.name}",${r.phone},"${r.thikana}","${r.board}",${r.gari},${r.date},"${r.seats.join(' ')}",${r.total},"${r.payMethod||''}","${r.trxId||''}",${r.status||'confirmed'}\n`; });
+  records.forEach(r=>{ csv+=`${r.no},"${r.name}",${r.phone},"${r.thikana}","${r.board}",${r.gari},${formatDateDMY(r.date)},"${r.seats.join(' ')}",${r.total},"${r.payMethod||''}","${r.trxId||''}",${r.status||'confirmed'}\n`; });
   let blob=new Blob(['\ufeff'+csv],{type:'text/csv'});
   let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='nur-mahal-list.csv'; a.click();
 }
