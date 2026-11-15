@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>নূরমহল বাস কাফেলা এডমিন </title>
+<title>নূরমহল বাস কাফেলা এডমিন</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{box-sizing:border-box;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important} body{font-family:sans-serif;background:#eef2f7;margin:0;padding:12px}
@@ -46,7 +46,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .tpCell{border:1px solid #333;border-radius:5px;background:#fff;padding:2px 1px;text-align:center;font-size:8px;font-weight:900;line-height:1.1;min-height:16px;overflow:hidden}
 .tpCell small{display:block;font-size:6px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tpCell.mine{background:#d32f2f!important;color:#fff!important;border-color:#d32f2f}
-.tpLast{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:3px}
+.tpLast{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-top:3px}
 .tpLegend{text-align:center;font-size:8px;font-weight:900;margin-top:3px;color:#333;line-height:1.4}
 .planBox{margin-top:12px;border:2px solid #0d3a6b;border-radius:14px;padding:10px;background:#fff8d6}
 .planHead{text-align:center;font-weight:900;color:#0d3a6b;font-size:15px}
@@ -70,7 +70,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .sBox small{font-size:10px;opacity:.8;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .mainGrid{display:grid;grid-template-columns:1fr 1fr 28px 1fr 1fr;gap:6px;align-items:stretch}
 .goli{display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-weight:900;color:#888;font-size:11px;letter-spacing:2px}
-.lastRow{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.lastRow{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:8px}
 .lastTitle{text-align:center;color:#d32f2f;font-weight:900;font-size:12px;margin:10px 0 4px}
 .clearBtn{width:100%;padding:9px;background:#fff;border:1.5px solid #d32f2f;color:#d32f2f;border-radius:9px;font-weight:900;margin-top:8px;cursor:pointer}
 .recBox{background:#fff;max-width:520px;margin:14px auto;padding:14px;border-radius:16px;box-shadow:0 4px 16px #0001}
@@ -111,7 +111,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 </head>
 <body>
 <div class="form hidePrint">
-<h2>🚌 নূরমহল - ফুল সিস্টেম</h2>
+<h2>🚌 নূরমহল বাস কাফেলা এডমিন</h2>
 <p>টিকেট নং অটো | ভাড়া সিট অনুযায়ী অটো | দাঁড়ানো টিকেট আছে</p>
 <div class="statBox">
 <div style="text-align:center;font-weight:900">⏳ পেন্ডিং: <span id="pendingCount">০</span> টা | ✅ কনফার্ম: <span id="confirmCount">০</span> টা | মোট: <span id="totalTicket">০</span> টা</div>
@@ -221,7 +221,7 @@ function saveBlocked(){ localStorage.setItem('nur_blocked',JSON.stringify(blocke
 function getNextNo(){ let max=0; records.forEach(r=>{ let n=parseInt(r.no); if(n>max) max=n; }); return max+1; }
 function showNextNo(){ document.getElementById('inNo').value=toBn(String(getNextNo()).padStart(3,'0')); }
 function fareForSeat(s){ if(s.startsWith('M-')||s.startsWith('N-')) return 800; return 1020; }
-function busInfo(gari){ if(String(gari)==='১'||String(gari)==='1') return {no:'০১',place:'গৌরীপুর',k:['K1','K2','K3','K4','K6']}; if(String(gari)==='২'||String(gari)==='2') return {no:'০২',place:'শম্ভুগঞ্জ',k:['K1','K2','K3','K4','K5']}; return {no:toBn(gari),place:'-',k:['K1','K2','K3','K4','K5']}; }
+function busInfo(gari){ if(String(gari)==='১'||String(gari)==='1') return {no:'০১',place:'গৌরীপুর',k:['K1','K2','K3','K4','K6']}; if(String(gari)==='২'||String(gari)==='2') return {no:'০২',place:'শম্ভুগঞ্জ',k:['K1','K2','K3','K4','K5','K6']}; return {no:toBn(gari),place:'-',k:['K1','K2','K3','K4','K5']}; }
 function getKSeats(gari){ return busInfo(gari).k; }
 function autoByPhone(){
   let ph=cleanPhone(document.getElementById('inPhone').value);
@@ -262,10 +262,13 @@ function renderLastRow(){
   let lr=document.getElementById('lastRow');
   let k=getKSeats(document.getElementById('inGari').value);
   lr.innerHTML='';
+  lr.style.gridTemplateColumns='repeat('+k.length+',1fr)';
   k.forEach(s=>{ lr.innerHTML+=`<div class="sBox" data-seat="${s}" onclick="toggleSeat('${s}')"><b>${s}</b><br><small>Name: ...</small></div>`; });
   let info=busInfo(document.getElementById('inGari').value);
-  document.getElementById('planSub').textContent='SEAT PLAN | বাস নং '+info.no+' | স্থানঃ '+info.place+' | TOTAL 53 SEAT';
-  document.getElementById('planNote').textContent='N-1 to N-4 + M-1 to M-4 + A-J:40 + '+k.join(',')+' = Total 53 Seats';
+  let total=48+k.length;
+  document.getElementById('planSub').textContent='SEAT PLAN | বাস নং '+info.no+' | স্থানঃ '+info.place+' | TOTAL '+total+' SEAT';
+  document.getElementById('planNote').textContent='N-1 to N-4 + M-1 to M-4 + A-J:40 + '+k.join(',')+' = Total '+total+' Seats';
+  document.getElementById('cTotal').textContent=toBn(total);
 }
 function blockedSeats(){ return blocked.filter(b=>b.gari===document.getElementById('inGari').value && b.date===document.getElementById('inDate').value).map(b=>b.seat); }
 function bookedSeats(){ let all=[]; records.forEach(r=>{ if(r.gari===document.getElementById('inGari').value && r.date===document.getElementById('inDate').value && (r.status||'confirmed')!=='pending'){ r.seats.forEach(s=>{ if(s!=='দাঁড়ানো') all.push(s); }); } }); return all; }
@@ -301,7 +304,8 @@ function updateUI(){
   });
   document.getElementById('inSeat').value=standing? 'দাঁড়ানো' : selected.join(', ');
   document.getElementById('cSel').textContent=toBn(selected.length);
-  document.getElementById('cFree').textContent=toBn(53-booked.length-pend.length-blk.length-selected.length);
+  let totalSeats=48+getKSeats(document.getElementById('inGari').value).length;
+  document.getElementById('cFree').textContent=toBn(totalSeats-booked.length-pend.length-blk.length-selected.length);
   document.getElementById('selList').textContent=selected.length? 'সিলেক্ট: '+selected.join(', ') : 'কোনো সিট সিলেক্ট হয় নাই - সিটে ক্লিক করো';
   updateTotal(); renderRecord(); showNextNo();
 }
