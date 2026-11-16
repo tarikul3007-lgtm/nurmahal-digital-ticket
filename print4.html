@@ -107,7 +107,6 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .legend span{padding:4px 8px;border-radius:20px}
 .bookedList{margin-top:10px;background:#fff;border:1.5px solid #0d3a6b;border-radius:10px;padding:8px;font-size:12px;line-height:1.7}
 .bookedList b{color:#0d3a6b}
-/* A4 সিট প্ল্যান - সাদা বক্সে কালো বোল্ড বড় লেখা */
 .a4plan{width:794px;background:#fff!important;padding:22px;box-sizing:border-box;color:#000!important}
 .a4plan .a4head{background:#fff!important;color:#000!important;border:3px solid #000;border-radius:12px;padding:14px;text-align:center}
 .a4plan .a4head h2{margin:0;font-size:30px;font-weight:900;color:#000!important}
@@ -125,6 +124,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .a4plan .a4cell.pending{border:2px dashed #000!important;background:#fff!important}
 .a4plan .a4cell.blocked{border:2px solid #000!important;background:#fff!important}
 .a4plan .a4foot{background:#fff!important;color:#000!important;text-align:center;font-weight:900;font-size:15px;padding:10px;border:3px solid #000;border-radius:10px;margin-top:12px}
+.progressBar{width:100%;background:#eef2f7;border:2px solid #000;border-radius:10px;padding:8px;text-align:center;font-weight:900;margin-top:8px;display:none}
 @media print{
   body{background:#fff;padding:0} .form,.btnPrint,.btnDown,.hidePrint,.recBox{display:none!important}
   .page{max-width:100%!important;width:100%!important;padding:0;margin:0;display:grid!important;grid-template-columns:1fr 1fr 1fr!important;gap:3mm!important}
@@ -212,6 +212,8 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <div style="text-align:center;font-size:10px;color:#555;margin-top:6px" id="planNote">N-1 to N-4 + M-1 to M-4 + A-J:40 + K1,K2,K3,K4,K5,K6 = Total 54 Seats</div>
 </div>
 <button class="btnDown hidePrint" style="margin-top:10px;background:#000" onclick="downloadSeatPlan()">🖨️ এই গাড়ির সিট প্ল্যান ডাউনলোড করো - সাদা বক্সে কালো বড় লেখা A4</button>
+<button class="btnDown hidePrint" style="background:#0d5c3f" onclick="downloadAllTicketsForBus()">📥 এই গাড়ির সব টিকেট একসাথে ডাউনলোড করো - ১ ক্লিকে প্রতি সিটের ১টা করে</button>
+<div class="progressBar" id="progressBar">ডাউনলোড চলতেছে...</div>
 <div style="background:#fff3cd;border-radius:10px;padding:10px;margin-top:12px">
 <label>তুমি কিভাবে টাকা নিছো? (অনলাইন থেকে আসলে অটো আসবে)</label>
 <select id="payMethod"><option>Cash - হাতে নগদ</option><option>বিকাশ</option><option>নগদ</option></select>
@@ -249,8 +251,9 @@ function toEn(s){return String(s).replace(/[০-৯]/g,d=>"০১২৩৪৫৬
 function formatDateDMY(d){ if(!d) return '---'; let p=String(d).split('-'); if(p.length!==3) return d; return toBn(p[2]+'-'+p[1]+'-'+p[0]); }
 function cleanPhone(s){return toEn(String(s||'')).replace(/[^0-9]/g,'')}
 function cleanFileName(s){ return String(s||'').replace(/[\\\/:*?"<>|]/g,'').replace(/\s+/g,'-').substring(0,60); }
+function waitMs(ms){ return new Promise(res=>setTimeout(res,ms)); }
 function todayLocal(){ let d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
-let selected=[]; let standing=false; let blockMode=false; let editIndex=-1; let moraMode=false; let selectedMora=''; let lastTicket=null;
+let selected=[]; let standing=false; let blockMode=false; let editIndex=-1; let moraMode=false; let selectedMora=''; let lastTicket=null; let isDownloadingAll=false;
 let records=JSON.parse(localStorage.getItem('nur_records')||'[]');
 let blocked=JSON.parse(localStorage.getItem('nur_blocked')||'[]');
 function saveBlocked(){ localStorage.setItem('nur_blocked',JSON.stringify(blocked)); }
@@ -517,6 +520,35 @@ function downloadTicket(){
     });
   },500);
 }
+async function downloadAllTicketsForBus(){
+  if(isDownloadingAll){ alert('ডাউনলোড চলতেছে ভাই, একটু ওয়েট করো!'); return; }
+  let gari=document.getElementById('inGari').value;
+  let dateVal=document.getElementById('inDate').value;
+  let list=records.filter(r=>r.gari===gari && r.date===dateVal);
+  if(!list.length){ alert('এই গাড়িতে এই তারিখে কোনো টিকেট নাই ভাই! গাড়ি নং + তারিখ ঠিক করো।'); return; }
+  if(!confirm('গাড়ি '+gari+' এর '+toBn(list.length)+' টা টিকেট একসাথে ডাউনলোড হবে। ব্রাউজার ডাউনলোড Allow করতে বললে Allow দিও। শুরু করবো?')) return;
+  isDownloadingAll=true;
+  let bar=document.getElementById('progressBar'); bar.style.display='block';
+  for(let i=0;i<list.length;i++){
+    let r=list[i];
+    bar.textContent='ডাউনলোড চলতেছে... '+toBn(i+1)+' / '+toBn(list.length)+' - '+r.name+' - '+r.seats.join(', ');
+    document.getElementById('page').innerHTML=ticketHTML(r);
+    document.getElementById('page').scrollIntoView({behavior:'smooth'});
+    await waitMs(900);
+    let el=document.querySelector('#page .ticket');
+    if(el){
+      let canvas=await html2canvas(el,{scale:4,backgroundColor:'#ffffff',useCORS:true,logging:false,imageTimeout:5000});
+      let seatsTxt=String(r.seats.join('-')).replace(/[^a-zA-Z0-9-]/g,'-');
+      let fname='NurMahal-'+cleanFileName(r.name)+'-'+seatsTxt+'.png';
+      let a=document.createElement('a'); a.download=fname; a.href=canvas.toDataURL('image/png',1.0); a.click();
+    }
+    await waitMs(600);
+  }
+  bar.textContent='✅ সব টিকেট ডাউনলোড হয়ে গেছে ভাই! মোট '+toBn(list.length)+' টা';
+  isDownloadingAll=false;
+  setTimeout(()=>{ bar.style.display='none'; },3000);
+  alert('✅ হয়ে গেছে ভাই! গাড়ি '+gari+' এর মোট '+toBn(list.length)+' টা টিকেট ডাউনলোড হয়ে গেছে।');
+}
 function buildA4SeatPlan(){
   let gari=document.getElementById('inGari').value;
   let dateVal=document.getElementById('inDate').value||todayLocal();
@@ -636,4 +668,4 @@ document.getElementById('inDate').value=todayLocal();
 updateUI();
 </script>
 </body>
-</html>
+  </html>
