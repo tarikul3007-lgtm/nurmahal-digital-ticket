@@ -252,6 +252,7 @@ function formatDateDMY(d){ if(!d) return '---'; let p=String(d).split('-'); if(p
 function cleanPhone(s){return toEn(String(s||'')).replace(/[^0-9]/g,'')}
 function cleanFileName(s){ return String(s||'').replace(/[\\\/:*?"<>|]/g,'').replace(/\s+/g,'-').substring(0,60); }
 function waitMs(ms){ return new Promise(res=>setTimeout(res,ms)); }
+function waitForImages(el){ let imgs=[...el.querySelectorAll('img')]; return Promise.all(imgs.map(img=>{ if(img.complete && img.naturalWidth>0) return Promise.resolve(); return new Promise(res=>{ img.onload=()=>res(); img.onerror=()=>res(); setTimeout(()=>res(),2500); }); })); }
 function todayLocal(){ let d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 let selected=[]; let standing=false; let blockMode=false; let editIndex=-1; let moraMode=false; let selectedMora=''; let lastTicket=null; let isDownloadingAll=false;
 let records=JSON.parse(localStorage.getItem('nur_records')||'[]');
@@ -510,7 +511,7 @@ function downloadTicket(){
   if(!el){ alert('আগে টিকেট বানাও ভাই!'); return; }
   let r=lastTicket;
   let fname='NurMahal-Ticket.png';
-  if(r){ let seatsTxt=String(r.seats.join('-')).replace(/[^a-zA-Z0-9-]/g,'-'); fname='NurMahal-'+cleanFileName(r.name)+'-'+seatsTxt+'.png'; }
+  if(r){ let seatsTxt=String(r.seats.join('-')).replace(/[^a-zA-Z0-9-]/g,'-'); fname='NurMahal-'+String(r.no)+'-'+cleanFileName(r.name)+'-'+seatsTxt+'.png'; }
   setTimeout(()=>{
     html2canvas(el,{scale:6,backgroundColor:'#ffffff',useCORS:true,logging:false,imageTimeout:5000,windowWidth:document.documentElement.clientWidth,windowHeight:document.documentElement.clientHeight}).then(canvas=>{
       let a=document.createElement('a');
@@ -526,28 +527,34 @@ async function downloadAllTicketsForBus(){
   let dateVal=document.getElementById('inDate').value;
   let list=records.filter(r=>r.gari===gari && r.date===dateVal);
   if(!list.length){ alert('এই গাড়িতে এই তারিখে কোনো টিকেট নাই ভাই! গাড়ি নং + তারিখ ঠিক করো।'); return; }
-  if(!confirm('গাড়ি '+gari+' এর '+toBn(list.length)+' টা টিকেট একসাথে ডাউনলোড হবে। ব্রাউজার ডাউনলোড Allow করতে বললে Allow দিও। শুরু করবো?')) return;
+  if(!confirm('গাড়ি '+gari+' এর '+toBn(list.length)+' টা টিকেট একসাথে ডাউনলোড হবে। একটু সময় লাগবে, পেজ কাটবা না। শুরু করবো?')) return;
   isDownloadingAll=true;
   let bar=document.getElementById('progressBar'); bar.style.display='block';
+  let done=0;
   for(let i=0;i<list.length;i++){
     let r=list[i];
     bar.textContent='ডাউনলোড চলতেছে... '+toBn(i+1)+' / '+toBn(list.length)+' - '+r.name+' - '+r.seats.join(', ');
     document.getElementById('page').innerHTML=ticketHTML(r);
     document.getElementById('page').scrollIntoView({behavior:'smooth'});
-    await waitMs(900);
+    await waitMs(1200);
     let el=document.querySelector('#page .ticket');
     if(el){
-      let canvas=await html2canvas(el,{scale:4,backgroundColor:'#ffffff',useCORS:true,logging:false,imageTimeout:5000});
-      let seatsTxt=String(r.seats.join('-')).replace(/[^a-zA-Z0-9-]/g,'-');
-      let fname='NurMahal-'+cleanFileName(r.name)+'-'+seatsTxt+'.png';
-      let a=document.createElement('a'); a.download=fname; a.href=canvas.toDataURL('image/png',1.0); a.click();
+      await waitForImages(el);
+      await waitMs(400);
+      try{
+        let canvas=await html2canvas(el,{scale:3,backgroundColor:'#ffffff',useCORS:true,logging:false,imageTimeout:8000});
+        let seatsTxt=String(r.seats.join('-')).replace(/[^a-zA-Z0-9-]/g,'-');
+        let fname='NurMahal-'+String(r.no)+'-'+cleanFileName(r.name)+'-'+seatsTxt+'.png';
+        let a=document.createElement('a'); a.download=fname; a.href=canvas.toDataURL('image/png',1.0); document.body.appendChild(a); a.click(); a.remove();
+        done++;
+      }catch(e){ console.log('fail',r.no,e); }
     }
-    await waitMs(600);
+    await waitMs(1500);
   }
-  bar.textContent='✅ সব টিকেট ডাউনলোড হয়ে গেছে ভাই! মোট '+toBn(list.length)+' টা';
+  bar.textContent='✅ সব টিকেট ডাউনলোড হয়ে গেছে ভাই! মোট '+toBn(done)+' / '+toBn(list.length)+' টা';
   isDownloadingAll=false;
-  setTimeout(()=>{ bar.style.display='none'; },3000);
-  alert('✅ হয়ে গেছে ভাই! গাড়ি '+gari+' এর মোট '+toBn(list.length)+' টা টিকেট ডাউনলোড হয়ে গেছে।');
+  setTimeout(()=>{ bar.style.display='none'; },4000);
+  alert('✅ হয়ে গেছে ভাই! মোট '+toBn(done)+' টা টিকেট ডাউনলোড হইছে। ডাউনলোড ফোল্ডারে গিয়ে গুনে দেখো।');
 }
 function buildA4SeatPlan(){
   let gari=document.getElementById('inGari').value;
