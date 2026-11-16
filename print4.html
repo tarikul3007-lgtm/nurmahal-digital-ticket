@@ -107,6 +107,19 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 .legend span{padding:4px 8px;border-radius:20px}
 .bookedList{margin-top:10px;background:#fff;border:1.5px solid #0d3a6b;border-radius:10px;padding:8px;font-size:12px;line-height:1.7}
 .bookedList b{color:#0d3a6b}
+.a4plan{width:794px;background:#fff;padding:24px;box-sizing:border-box}
+.a4plan .a4head{background:linear-gradient(90deg,#0d3a6b,#155e9e);color:#fff;border-radius:14px;padding:14px;text-align:center}
+.a4plan .a4head h2{margin:0;font-size:26px}
+.a4plan .a4head p{margin:4px 0 0;font-size:14px;color:#ffe58a}
+.a4plan .a4info{background:#fff2a8;border:1.5px solid #e8a91c;border-radius:10px;text-align:center;font-weight:900;font-size:16px;color:#0d3a6b;padding:8px;margin:12px 0}
+.a4plan .a4grid{display:grid;grid-template-columns:1fr 1fr 30px 1fr 1fr;gap:8px}
+.a4plan .a4cell{border:1.5px solid #333;border-radius:8px;background:#fff;padding:8px 2px;text-align:center;font-weight:900;font-size:15px;line-height:1.3;min-height:52px}
+.a4plan .a4cell small{display:block;font-size:11px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.a4plan .a4cell.booked{background:#0d5c3f!important;color:#fff!important}
+.a4plan .a4cell.booked small{color:#ffe58a!important}
+.a4plan .a4cell.pending{background:#ff9800!important;color:#fff!important}
+.a4plan .a4cell.blocked{background:#333!important;color:#fff!important}
+.a4plan .a4foot{background:#e8f5e9;color:#0d5c3f;text-align:center;font-weight:900;font-size:14px;padding:8px;border-top:2px solid #e8a91c;border-radius:0 0 10px 10px;margin-top:12px}
 @media print{
   body{background:#fff;padding:0} .form,.btnPrint,.btnDown,.hidePrint,.recBox{display:none!important}
   .page{max-width:100%!important;width:100%!important;padding:0;margin:0;display:grid!important;grid-template-columns:1fr 1fr 1fr!important;gap:3mm!important}
@@ -193,7 +206,7 @@ label{font-size:13px;font-weight:bold;display:block;margin-top:10px} input,selec
 <button class="modeBtn" id="blockBtn" onclick="toggleBlockMode()">🚧 সিট ব্লক মোড - নষ্ট সিট ব্লক করতে চাপ দাও</button>
 <div style="text-align:center;font-size:10px;color:#555;margin-top:6px" id="planNote">N-1 to N-4 + M-1 to M-4 + A-J:40 + K1,K2,K3,K4,K5,K6 = Total 54 Seats</div>
 </div>
-<button class="btnDown hidePrint" style="margin-top:10px;background:#0d5c3f" onclick="downloadSeatPlan()">📥 এই গাড়ির সিট প্ল্যান ছবি ডাউনলোড করো - নাম সহ</button>
+<button class="btnDown hidePrint" style="margin-top:10px;background:#0d5c3f" onclick="downloadSeatPlan()">📥 এই গাড়ির সিট প্ল্যান ছবি ডাউনলোড করো - A4 সাইজ</button>
 <div style="background:#fff3cd;border-radius:10px;padding:10px;margin-top:12px">
 <label>তুমি কিভাবে টাকা নিছো? (অনলাইন থেকে আসলে অটো আসবে)</label>
 <select id="payMethod"><option>Cash - হাতে নগদ</option><option>বিকাশ</option><option>নগদ</option></select>
@@ -488,28 +501,69 @@ function downloadTicket(){
   let el=document.querySelector('#page .ticket');
   if(!el){ alert('আগে টিকেট বানাও ভাই!'); return; }
   let r=lastTicket;
-  let fname='NurMahal-Ticket-HD.png';
-  if(r){ let seatsTxt=String(r.seats.join('-')).replace(/[^a-zA-Z0-9-]/g,'-'); fname='NurMahal-Ticket-'+String(r.no)+'-'+cleanFileName(r.name)+'-'+seatsTxt+'.png'; }
+  let fname='NurMahal-Ticket.png';
+  if(r){ let seatsTxt=String(r.seats.join('-')).replace(/[^a-zA-Z0-9-]/g,'-'); fname='NurMahal-'+cleanFileName(r.name)+'-'+seatsTxt+'.png'; }
   setTimeout(()=>{
     html2canvas(el,{scale:6,backgroundColor:'#ffffff',useCORS:true,logging:false,imageTimeout:5000,windowWidth:document.documentElement.clientWidth,windowHeight:document.documentElement.clientHeight}).then(canvas=>{
       let a=document.createElement('a');
       a.download=fname;
       a.href=canvas.toDataURL('image/png',1.0); a.click();
-      alert('✅ HD টিকেট ডাউনলোড হয়ে গেছে ভাই! নাম: '+fname);
+      alert('✅ টিকেট ডাউনলোড হয়ে গেছে ভাই! নাম: '+fname);
     });
   },500);
 }
+function buildA4SeatPlan(){
+  let gari=document.getElementById('inGari').value;
+  let dateVal=document.getElementById('inDate').value||todayLocal();
+  let info=busInfo(gari);
+  let total=48+getKSeats(gari).length;
+  let booked=bookedSeats(); let pend=pendingSeats(); let blk=blockedSeats();
+  let free=total-booked.length-pend.length-blk.length-selected.length;
+  function cellHTML(seat){
+    let rec=records.find(r=>r.gari===gari && r.date===dateVal && r.seats.includes(seat));
+    let cls='a4cell';
+    let nameTxt='খালি';
+    if(rec){ cls+=' booked'; nameTxt=rec.name; }
+    else if(pend.includes(seat)){ cls+=' pending'; let pr=records.find(r=>r.gari===gari && r.date===dateVal && r.seats.includes(seat)); nameTxt=pr?pr.name:'পেন্ডিং'; }
+    else if(blk.includes(seat)){ cls+=' blocked'; nameTxt='ব্লক'; }
+    return `<div class="${cls}">${seat}<small>${nameTxt}</small></div>`;
+  }
+  let frontHTML=cellHTML('N-3')+cellHTML('M-1')+cellHTML('M-2');
+  let front2HTML=cellHTML('N-4')+cellHTML('M-3')+cellHTML('M-4');
+  let front3HTML=`<div></div>`+cellHTML('N-1')+cellHTML('N-2');
+  let gridHTML='';
+  rows.forEach(rr=>{
+    gridHTML+=cellHTML(rr+'-1')+cellHTML(rr+'-2')+`<div style="display:flex;align-items:center;justify-content:center;font-weight:900;color:#888;font-size:11px;writing-mode:vertical-rl">গলি</div>`+cellHTML(rr+'-3')+cellHTML(rr+'-4');
+  });
+  let lastHTML=getKSeats(gari).map(s=>cellHTML(s)).join('');
+  let wrap=document.createElement('div');
+  wrap.className='a4plan';
+  wrap.style.position='fixed'; wrap.style.left='-9999px'; wrap.style.top='0';
+  wrap.innerHTML=`<div class="a4head"><h2>🚌 নূরমহল সুরেশ্বর বাস কাফেলা</h2><p>গৌরীপুর শম্ভুগঞ্জ টু সুরেশ্বর দরবার শরীফ</p></div>
+  <div class="a4info">🚌 গাড়ি নং: ${gari} | স্থানঃ ${info.place} | যাত্রার তারিখ: ${formatDateDMY(dateVal)} | মোট: ${toBn(total)} | বুকড: ${toBn(booked.length+pend.length)} | খালি: ${toBn(free)}</div>
+  <div style="display:flex;gap:8px;justify-content:center;margin:10px 0;font-weight:900;font-size:13px"><span style="background:#fff;border:1.5px solid #333;padding:4px 10px;border-radius:20px">⬜ খালি</span><span style="background:#0d5c3f;color:#fff;padding:4px 10px;border-radius:20px">🟩 বুকড + নাম</span><span style="background:#ff9800;color:#fff;padding:4px 10px;border-radius:20px">🟧 পেন্ডিং + নাম</span><span style="background:#333;color:#fff;padding:4px 10px;border-radius:20px">⬛ ব্লক</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px"><div style="background:#8ecdf5;text-align:center;font-weight:900;padding:8px;border-radius:8px">প্রবেশ</div><div style="background:#8ecdf5;text-align:center;font-weight:900;padding:8px;border-radius:8px">বনাট</div><div style="background:#000;color:#fff;text-align:center;font-weight:900;padding:8px;border-radius:8px">◎ চালক</div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">${frontHTML}</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">${front2HTML}</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">${front3HTML}</div>
+  <div class="a4grid">${gridHTML}</div>
+  <div style="text-align:center;color:#d32f2f;font-weight:900;margin:12px 0 6px">শেষের সারি</div>
+  <div style="display:grid;grid-template-columns:repeat(${getKSeats(gari).length},1fr);gap:8px">${lastHTML}</div>
+  <div class="a4foot">🙏 আপনার যাত্রা শুভ হোক | তরিকুল ০১৯২৩-৫৩১৫১০ | সিটের ভিতরে নাম দেখে বুঝবেন কে কোন সিট বুকড করছে</div>`;
+  document.body.appendChild(wrap);
+  return wrap;
+}
 function downloadSeatPlan(){
-  let el=document.getElementById('planBox');
-  if(!el){ alert('সিট প্ল্যান পাওয়া যায় নাই!'); return; }
   let gari=document.getElementById('inGari').value;
   let dateVal=document.getElementById('inDate').value||todayLocal();
   let fname='NurMahal-SeatPlan-Gari-'+toEn(gari)+'-'+formatDateDMY(dateVal).replace(/-/g,'-')+'.png';
-  html2canvas(el,{scale:4,backgroundColor:'#ffffff',useCORS:true,logging:false}).then(canvas=>{
+  let el=buildA4SeatPlan();
+  html2canvas(el,{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false,width:794}).then(canvas=>{
     let a=document.createElement('a');
     a.download=fname;
     a.href=canvas.toDataURL('image/png',1.0); a.click();
-    alert('✅ সিট প্ল্যান ডাউনলোড হয়ে গেছে ভাই! নাম সহ সব বুকড সিট দেখা যাবে। ফাইল: '+fname);
+    el.remove();
+    alert('✅ A4 সিট প্ল্যান ডাউনলোড হয়ে গেছে ভাই! টিকেটের মতো বাংলা ডিজাইন, নিচে নামের লিস্ট নাই - সিটের ভিতরেই নাম আছে।');
   });
 }
 function exportBackup(){
@@ -577,4 +631,4 @@ document.getElementById('inDate').value=todayLocal();
 updateUI();
 </script>
 </body>
-                                                                                                                                                                           </html>
+  </html>
